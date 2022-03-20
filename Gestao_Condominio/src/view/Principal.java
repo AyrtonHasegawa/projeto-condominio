@@ -38,6 +38,8 @@ public class Principal extends javax.swing.JFrame {
         statusInicioFuncionario(true);
         statusInicioApartamento(true);
         statusInicioMorador(true);
+        statusInicioVisita(true);
+        statusInicioVeiculo(true);
     }
 
     //------------------------Funcionário----------------------------
@@ -222,6 +224,11 @@ public class Principal extends javax.swing.JFrame {
         
     }
     private void LimparApartamento(){
+        txtCodApartamento.setText("");
+        txtBlocoApartamento.setText("");
+        txtNumeroApartamento.setText("");
+        txtEstacionamento1.setText("");
+        txtEstacionamento2.setText("");
         
     }
     
@@ -295,6 +302,38 @@ public class Principal extends javax.swing.JFrame {
         radioNaoMorador.setEnabled(status);
     }
     
+    //------------------- Visita ------------------
+    private void statusInicioVisita(boolean status){
+        txtDataVisita.setEnabled(!status);
+        txtHoraVisita.setEnabled(!status);
+        txtCpfVisitanteVisita.setEnabled(!status);
+        txtNomeVisitanteVisita.setEnabled(!status);
+        txtCpfMoradorVisita.setEnabled(!status);
+        txtTelefoneMoradorVisita.setEnabled(!status);
+        txtNomeMoradorVisita.setEnabled(!status);
+       
+        btnIncluirVisita.setEnabled(status);
+        btnIncluirVisitanteLista.setEnabled(!status);
+        btnExcluirVisitanteLista.setEnabled(!status);
+        btnExcluirVisita.setEnabled(!status);
+        
+    }
+    //------------------- Veículo ------------------
+    private void statusInicioVeiculo(boolean status){
+        txtPlacaVeiculo.setEnabled(!status);
+        txtModeloVeiculo.setEnabled(!status);
+        txtCorVeiculo.setEnabled(!status);
+        txtFabricanteVeiculo.setEnabled(!status);
+        txtCpfMoradorVeiculo.setEnabled(!status);
+        txtNomeMoradorVeiculo.setEnabled(!status);
+        txtBlocoApartamentoVeiculo.setEnabled(!status);
+        txtNumeroApartamentoVeiculo.setEnabled(!status);
+       
+        btnConsultarVeiculo.setEnabled(status);
+        btnIncluirVeiculo.setEnabled(!status);
+        btnExcluirVeiculo.setEnabled(!status);
+        
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -380,7 +419,7 @@ public class Principal extends javax.swing.JFrame {
         btnLocalizarNomeMoradorVisita = new javax.swing.JButton();
         btnLimparVisita = new javax.swing.JButton();
         btnExcluirVisita = new javax.swing.JButton();
-        btnIncluirVisitanteNaVisita = new javax.swing.JButton();
+        btnExcluirVisitanteLista = new javax.swing.JButton();
         jLabel66 = new javax.swing.JLabel();
         txtTelefoneMoradorVisita = new javax.swing.JTextField();
         jLabel67 = new javax.swing.JLabel();
@@ -402,6 +441,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         btnSalvarVisita = new javax.swing.JButton();
         btnLocalizarCpfMoradorVisita = new javax.swing.JButton();
+        btnIncluirVisitanteLista = new javax.swing.JButton();
         painelVisitante = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -460,7 +500,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel84 = new javax.swing.JLabel();
         txtCpfMoradorVeiculo = new javax.swing.JTextField();
         jLabel85 = new javax.swing.JLabel();
-        btnNomeMoradorVeiculo = new javax.swing.JTextField();
+        txtNomeMoradorVeiculo = new javax.swing.JTextField();
         jLabel86 = new javax.swing.JLabel();
         txtBlocoApartamentoVeiculo = new javax.swing.JTextField();
         jLabel87 = new javax.swing.JLabel();
@@ -897,14 +937,14 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirVisita.setText("Excluir Visita");
         painelVisita.add(btnExcluirVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, -1, -1));
 
-        btnIncluirVisitanteNaVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIncluirVisitanteNaVisita.setText("Incluir Visitante na Visita");
-        btnIncluirVisitanteNaVisita.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluirVisitanteLista.setText("Excluir Visitante da Lista");
+        btnExcluirVisitanteLista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIncluirVisitanteNaVisitaActionPerformed(evt);
+                btnExcluirVisitanteListaActionPerformed(evt);
             }
         });
-        painelVisita.add(btnIncluirVisitanteNaVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 160, 180, -1));
+        painelVisita.add(btnExcluirVisitanteLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 210, 180, -1));
 
         jLabel66.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel66.setText("Telefone do morador:");
@@ -1004,6 +1044,15 @@ public class Principal extends javax.swing.JFrame {
         btnLocalizarCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
         painelVisita.add(btnLocalizarCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 240, 20, 20));
+
+        btnIncluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnIncluirVisitanteLista.setText("Incluir Visitante na Lista");
+        btnIncluirVisitanteLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirVisitanteListaActionPerformed(evt);
+            }
+        });
+        painelVisita.add(btnIncluirVisitanteLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 160, 180, -1));
 
         jTabbedPane1.addTab("Visita", painelVisita);
 
@@ -1303,8 +1352,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel85.setText("Nome do Morador:");
         painelVeiculo.add(jLabel85, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 170, -1, -1));
 
-        btnNomeMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVeiculo.add(btnNomeMoradorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 450, -1));
+        txtNomeMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        painelVeiculo.add(txtNomeMoradorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 450, -1));
 
         jLabel86.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel86.setText("Lista de Veículos");
@@ -1523,9 +1572,9 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparVisitaActionPerformed
 
-    private void btnIncluirVisitanteNaVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitanteNaVisitaActionPerformed
+    private void btnExcluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitanteListaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnIncluirVisitanteNaVisitaActionPerformed
+    }//GEN-LAST:event_btnExcluirVisitanteListaActionPerformed
 
     private void btnSalvarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitaActionPerformed
         // TODO add your handling code here:
@@ -1550,7 +1599,8 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIncluirApartamentoActionPerformed
 
     private void btnLimparApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparApartamentoActionPerformed
-        // TODO add your handling code here:
+        LimparApartamento();
+        statusInicioApartamento(true);
     }//GEN-LAST:event_btnLimparApartamentoActionPerformed
 
     private void btnSalvarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarApartamentoActionPerformed
@@ -1650,6 +1700,10 @@ public class Principal extends javax.swing.JFrame {
         statusAlterarMorador(true);
     }//GEN-LAST:event_btnLocalizarNomeMoradorActionPerformed
 
+    private void btnIncluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitanteListaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIncluirVisitanteListaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1739,12 +1793,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluirVeiculo;
     private javax.swing.JButton btnExcluirVisita;
     private javax.swing.JButton btnExcluirVisitante;
+    private javax.swing.JButton btnExcluirVisitanteLista;
     private javax.swing.JButton btnIncluirApartamento;
     private javax.swing.JButton btnIncluirFun;
     private javax.swing.JButton btnIncluirMorador;
     private javax.swing.JButton btnIncluirVeiculo;
     private javax.swing.JButton btnIncluirVisita;
-    private javax.swing.JButton btnIncluirVisitanteNaVisita;
+    private javax.swing.JButton btnIncluirVisitanteLista;
     private javax.swing.JButton btnLimparApartamento;
     private javax.swing.JButton btnLimparFun;
     private javax.swing.JButton btnLimparMorador;
@@ -1764,7 +1819,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnLocalizarNomeVisitante;
     private javax.swing.JButton btnLocalizarPlacaVeiculo;
     private javax.swing.JButton btnLogout;
-    private javax.swing.JTextField btnNomeMoradorVeiculo;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSalvarApartamento;
     private javax.swing.JButton btnSalvarFun;
@@ -1887,6 +1941,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txtModeloVeiculo;
     private javax.swing.JTextField txtNomeFun;
     private javax.swing.JTextField txtNomeMorador;
+    private javax.swing.JTextField txtNomeMoradorVeiculo;
     private javax.swing.JTextField txtNomeMoradorVisita;
     private javax.swing.JTextField txtNomeVisitante;
     private javax.swing.JTextField txtNomeVisitanteVisita;
