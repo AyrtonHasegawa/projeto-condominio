@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 public class DadosCondominio {
     ConectaBD conecta = new ConectaBD();
     Funcionario funcionario = new Funcionario();
+    Apartamento apartamento = new Apartamento();
     Connection conCondominio;
     String sql, msg, statusConexao;  //listar
     PreparedStatement psCondominio;
@@ -219,11 +220,137 @@ public class DadosCondominio {
         
         return qnt;
     }
-    //------------Consulta codigo Antigo--------------
+    //------------ Apartamento --------------
     
+    public ResultSet consultaGeralApartamento(){
+        sql = "SELECT * FROM tb_apartamento";
+        try {
+            stCondominio = conCondominio.createStatement();
+            rsCondominio = stCondominio.executeQuery(sql);
+            rsCondominio.first();
+        } catch (Exception e) {
+            rsCondominio = null;
+        }
+        return rsCondominio;
+    }
     
+    public Apartamento consultaBlocoApartamento(String bloco){
+        sql = "SELECT * FROM tb_apartamento WHERE Ap_Bloco_Predio = ?";
+        try {
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setString(1, bloco);
+            rsCondominio = psCondominio.executeQuery();
+            
+            if (rsCondominio.next()) {
+                apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
+                apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
+                apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
+                
+                return apartamento;
+            } else{
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    public Apartamento consultaNumeroApartamento(int num){
+        sql = "SELECT * FROM tb_apartamento WHERE Ap_Num_Apartamento = ?";
+        try {
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setInt(1, num);
+            rsCondominio = psCondominio.executeQuery();
+            
+            if (rsCondominio.next()) {
+                apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
+                apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
+                apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
+                
+                return apartamento;
+            } else{
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
   
+    public String insereApartamento(Apartamento apartamento){
+        sql = "INSERT INTO tb_apartamento ( Ap_Bloco_Predio,"
+                + "Ap_Num_Apartamento, Ap_Num_Vaga1, Ap_Num_Vaga2)"
+                + "VALUES(?,?,?,?)";
+        
+        try{
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setInt(1, apartamento.getNumeroApartamento());
+            psCondominio.setString(2, apartamento.getBlocoApartamento());
+            psCondominio.setString(3, apartamento.getVagaApartamento_1());
+            psCondominio.setString(4, apartamento.getVagaApartamento_2());
+            
+            psCondominio.executeUpdate();
+            msg = "Apartamento inserido com sucesso!";
+        }catch(Exception e){
+            msg = "Erro de Inclusão";
+        }
+        return msg;
+    }
     
+    public String excluiApartamento(String codigo){
+        try {
+            sql = "DELETE FROM tb_apartamento WHERE Ap_Cod_Apartamento = ?";
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setString(1, codigo);
+            psCondominio.executeUpdate();
+            msg = "Apartamento excluido com sucesso! ";
+        } catch (Exception e) {
+            msg = "Erro de exclusão " + e.getMessage();
+        }
+        return msg;
+    }
     
+    public String alterarApartamento(Apartamento apartamento){
+        sql = "UPDATE tb_apartamento SET Ap_Bloco_Predio = ?, Ap_Num_Apartamento = ?, "
+                + "Ap_Num_Vaga1 = ?, Ap_Num_Vaga2 = ? WHERE Ap_Cod_Apartamento = ?";
+        try {
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setInt(5, apartamento.getCodigoAparatamento());
+            psCondominio.setInt(1, apartamento.getNumeroApartamento());
+            psCondominio.setString(2, apartamento.getBlocoApartamento());
+            psCondominio.setString(3, apartamento.getVagaApartamento_1());
+            psCondominio.setString(4, apartamento.getVagaApartamento_2());
+            psCondominio.executeUpdate();
+            msg = "Dados do Funcionário alterado com sucesso!";
+        } catch (Exception e) {
+            msg = "Erro na alteração!";
+        }
+        return msg;
+    }
+    
+    public Apartamento consultaCodigoApartamento(int codigo){
+        sql = "SELECT * FROM Tb_Funcionario WHWRE Fun_Cod_Funcionario = ?";
+        try {
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setInt(1, codigo);
+            rsCondominio = psCondominio.executeQuery();
+            if (rsCondominio.next()) {
+                apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
+                apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
+                apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
+                
+                return apartamento;
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
     
 }

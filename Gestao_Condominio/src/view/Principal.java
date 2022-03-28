@@ -9,6 +9,7 @@ package view;
 
 import classe.DadosCondominio;
 import classe.Funcionario;
+import classe.Apartamento;
 import view.Login;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public class Principal extends javax.swing.JFrame {
     String salvar, user;
     ResultSet rsCondominio = dadosCondominio.consultaGeral();
     Funcionario funcionario = new Funcionario();
+    Apartamento apartamento = new Apartamento();
     Login login = new Login();
     
     public Principal() {
@@ -163,7 +165,7 @@ public class Principal extends javax.swing.JFrame {
         txtTelefoneFun.setText("");
         txtEnderecoFun.setText("");
         txtLoginFun.setText("");
-        txtSenhaFun.setText("");
+        txtSenhaFun.setText("123456");
         grupoBotaoFuncionario.clearSelection();
     }
     
@@ -220,8 +222,26 @@ public class Principal extends javax.swing.JFrame {
         btnSalvarApartamento.setEnabled(status);
         btnLocalizarCodApartamento.setEnabled(!status);
     }
-    private void exibeGridApartamento(){
-        
+    private void exibeGridApartamento(ResultSet rs){
+        DefaultTableModel tabelaApart = new DefaultTableModel(null, new String[]
+                {"Código do Apartamento","Bloco do Prédio","Número do Apartamento",
+            "Estacionamento vaga 1","Estacionamento vaga 2"});
+        try {
+            rs.first();
+            while (!rs.isAfterLast()) {                
+                String[] dados = new String[5];
+                dados[0] = rs.getString("Ap_Cod_Apartamento");
+                dados[1] = rs.getString("Ap_Bloco_Predio");
+                dados[2] = rs.getString("Ap_Num_Apartamento");
+                dados[3] = rs.getString("Ap_Num_Vaga1");
+                dados[4] = rs.getString("Ap_Num_Vaga2");
+                
+                tabelaApart.addRow(dados);
+                rs.next();
+            }
+        } catch (Exception e) {
+        }
+        tabelaApartamento.setModel(tabelaApart);
     }
     private void LimparApartamento(){
         txtCodApartamento.setText("");
@@ -331,8 +351,7 @@ public class Principal extends javax.swing.JFrame {
        
         btnConsultarVeiculo.setEnabled(status);
         btnIncluirVeiculo.setEnabled(!status);
-        btnExcluirVeiculo.setEnabled(!status);
-        
+        btnExcluirVeiculo.setEnabled(!status);        
     }
     
     @SuppressWarnings("unchecked")
@@ -1450,6 +1469,7 @@ public class Principal extends javax.swing.JFrame {
     private void btnLimparFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparFunActionPerformed
         LimparFuncionario();
         statusInicioFuncionario(true);
+        salvar = "";
     }//GEN-LAST:event_btnLimparFunActionPerformed
 
     private void btnSalvarFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarFunActionPerformed
@@ -1594,7 +1614,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultarApartamentoActionPerformed
 
     private void btnIncluirApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirApartamentoActionPerformed
-        // TODO add your handling code here:
+        salvar = "Incluir";
         statusIncluirApartamento(true);
     }//GEN-LAST:event_btnIncluirApartamentoActionPerformed
 
@@ -1604,7 +1624,45 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimparApartamentoActionPerformed
 
     private void btnSalvarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarApartamentoActionPerformed
-        // TODO add your handling code here:
+        
+        setarApartamento();
+        String msg;
+        boolean status = apartamento.verificaCampoVazioApartamento(apartamento);
+        if (status == false) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", 
+                    JOptionPane.ERROR_MESSAGE);
+        }else{
+            Apartamento blocoExistente = new Apartamento();
+            blocoExistente = dadosCondominio.consultaBlocoApartamento(txtBlocoApartamento.getText());
+            Apartamento numeroExistente = new Apartamento();
+            numeroExistente = dadosCondominio.consultaNumeroApartamento(Integer.parseInt(txtNumeroApartamento.getText()));
+            
+//--------------------------Incluir------------------------            
+            if (salvar.equals("Incluir")) {
+                setarApartamento();
+                if (blocoExistente == null && numeroExistente == null) {
+                    if(JOptionPane.showConfirmDialog(this, "Deseja Incluir o Apartamento?",
+                            "Incluir Apartamento", JOptionPane.YES_NO_OPTION) == 0){
+                        msg = dadosCondominio.insereApartamento(apartamento);
+                        JOptionPane.showMessageDialog(this, msg, "Incluir Apartamento", JOptionPane.INFORMATION_MESSAGE);
+                        LimparApartamento();
+                        statusInicioApartamento(true);
+                        exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Apartamento já existe", "Apartamento já está cadastrado", JOptionPane.ERROR_MESSAGE);
+                    txtNumeroApartamento.setText("");
+                    }    
+
+//--------------------------Alterar------------------------                
+            }else if(salvar.equals("Alterar")){
+                setarApartamento();
+                apartamento.setCodigoAparatamento(Integer.parseInt(txtCodApartamento.getText()));
+                
+            }
+                
+                
+        }
     }//GEN-LAST:event_btnSalvarApartamentoActionPerformed
 
     private void btnConsultarVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarVeiculoActionPerformed
@@ -1686,7 +1744,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirFunActionPerformed
 
     private void btnLocalizarCodApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCodApartamentoActionPerformed
-        // TODO add your handling code here:
+        salvar = "Alterar";
         statusAlterarApartamento(true);
     }//GEN-LAST:event_btnLocalizarCodApartamentoActionPerformed
 
@@ -1779,7 +1837,22 @@ public class Principal extends javax.swing.JFrame {
             radioNaoFun.setSelected(true);
         }
     }
-    //-----------------------------------------
+    //---------------Método do Apartamento---------------
+    
+    private void setarApartamento(){
+        apartamento.setNumeroApartamento(Integer.parseInt(txtNumeroApartamento.getText()));
+        apartamento.setBlocoApartamento(txtBlocoApartamento.getText());
+        apartamento.setVagaApartamento_1(txtEstacionamento1.getText());
+        apartamento.setVagaApartamento_2(txtEstacionamento2.getName());
+    }
+    
+    private void pegarApartamento(){
+        txtCodApartamento.setText(String.valueOf(apartamento.getCodigoAparatamento()));
+        txtNumeroApartamento.setText(String.valueOf(apartamento.getNumeroApartamento()));
+        txtBlocoApartamento.setText(apartamento.getBlocoApartamento());
+        txtEstacionamento1.setText(apartamento.getVagaApartamento_1());
+        txtEstacionamento2.setText(apartamento.getVagaApartamento_2());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarFun10;
