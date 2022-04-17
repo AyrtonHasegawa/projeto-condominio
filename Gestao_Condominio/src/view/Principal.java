@@ -25,6 +25,7 @@ public class Principal extends javax.swing.JFrame {
     DadosCondominio dadosCondominio = new DadosCondominio();
     String salvar, user;
     ResultSet rsCondominio = dadosCondominio.consultaGeral();
+    ResultSet rsCondominioApartamento = dadosCondominio.consultaGeralApartamento();
     Funcionario funcionario = new Funcionario();
     Apartamento apartamento = new Apartamento();
     Login login = new Login();
@@ -34,6 +35,7 @@ public class Principal extends javax.swing.JFrame {
         lblMsg.setText(dadosCondominio.getCon());
         //lblNome_Fun.setText(login.chama());
         exibeGridFuncionario(rsCondominio);
+        exibeGridApartamento(rsCondominioApartamento);
         statusInicio();
     }
     private void statusInicio(){
@@ -201,8 +203,8 @@ public class Principal extends javax.swing.JFrame {
         txtCodApartamento.setEnabled(!status);
         txtBlocoApartamento.setEnabled(status);
         txtNumeroApartamento.setEnabled(status);
-        txtEstacionamento1.setEnabled(status);
-        txtEstacionamento2.setEnabled(status);
+        txtEstacionamento1.setEnabled(!status);
+        txtEstacionamento2.setEnabled(!status);
         
         btnIncluirApartamento.setEnabled(status);
         btnExcluirApartamento.setEnabled(status);
@@ -214,8 +216,8 @@ public class Principal extends javax.swing.JFrame {
         txtCodApartamento.setEnabled(!status);
         txtBlocoApartamento.setEnabled(status);
         txtNumeroApartamento.setEnabled(status);
-        txtEstacionamento1.setEnabled(status);
-        txtEstacionamento2.setEnabled(status);
+        txtEstacionamento1.setEnabled(!status);
+        txtEstacionamento2.setEnabled(!status);
         
         btnIncluirApartamento.setEnabled(!status);
         btnExcluirApartamento.setEnabled(!status);
@@ -1168,6 +1170,11 @@ public class Principal extends javax.swing.JFrame {
                 "Código do Apartamento", "Bloco do Prédio", "Nº do Apartamento", "Estacionamento 1", "Estacionamento 2"
             }
         ));
+        tabelaApartamento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaApartamentoMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabelaApartamento);
 
         painelApartamento.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 1100, 210));
@@ -1761,6 +1768,14 @@ public class Principal extends javax.swing.JFrame {
     private void btnIncluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitanteListaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIncluirVisitanteListaActionPerformed
+
+    private void tabelaApartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaApartamentoMouseClicked
+        salvar = "Alterar";
+        statusAlterarApartamento(true);
+        int posicao = tabelaApartamento.getSelectedRow();
+        apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(tabelaApartamento.getValueAt(posicao, 0).toString()));
+        pegarApartamento();
+    }//GEN-LAST:event_tabelaApartamentoMouseClicked
 
     /**
      * @param args the command line arguments

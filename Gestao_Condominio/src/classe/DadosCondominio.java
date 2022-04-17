@@ -282,15 +282,13 @@ public class DadosCondominio {
   
     public String insereApartamento(Apartamento apartamento){
         sql = "INSERT INTO tb_apartamento ( Ap_Bloco_Predio,"
-                + "Ap_Num_Apartamento, Ap_Num_Vaga1, Ap_Num_Vaga2)"
-                + "VALUES(?,?,?,?)";
+                + "Ap_Num_Apartamento) VALUES(?,?)";
         
         try{
             psCondominio = conCondominio.prepareStatement(sql);
-            psCondominio.setInt(1, apartamento.getNumeroApartamento());
-            psCondominio.setString(2, apartamento.getBlocoApartamento());
-            psCondominio.setString(3, apartamento.getVagaApartamento_1());
-            psCondominio.setString(4, apartamento.getVagaApartamento_2());
+            psCondominio.setString(1, apartamento.getBlocoApartamento());
+            psCondominio.setInt(2, apartamento.getNumeroApartamento());
+            
             
             psCondominio.executeUpdate();
             msg = "Apartamento inserido com sucesso!";
@@ -315,14 +313,12 @@ public class DadosCondominio {
     
     public String alterarApartamento(Apartamento apartamento){
         sql = "UPDATE tb_apartamento SET Ap_Bloco_Predio = ?, Ap_Num_Apartamento = ?, "
-                + "Ap_Num_Vaga1 = ?, Ap_Num_Vaga2 = ? WHERE Ap_Cod_Apartamento = ?";
+                + "WHERE Ap_Cod_Apartamento = ?";
         try {
             psCondominio = conCondominio.prepareStatement(sql);
             psCondominio.setInt(5, apartamento.getCodigoAparatamento());
             psCondominio.setInt(1, apartamento.getNumeroApartamento());
             psCondominio.setString(2, apartamento.getBlocoApartamento());
-            psCondominio.setString(3, apartamento.getVagaApartamento_1());
-            psCondominio.setString(4, apartamento.getVagaApartamento_2());
             psCondominio.executeUpdate();
             msg = "Dados do Funcionário alterado com sucesso!";
         } catch (Exception e) {
@@ -332,7 +328,7 @@ public class DadosCondominio {
     }
     
     public Apartamento consultaCodigoApartamento(int codigo){
-        sql = "SELECT * FROM Tb_Funcionario WHWRE Fun_Cod_Funcionario = ?";
+        sql = "SELECT * FROM tb_apartamento WHERE Ap_Cod_Apartamento = ?";
         try {
             psCondominio = conCondominio.prepareStatement(sql);
             psCondominio.setInt(1, codigo);

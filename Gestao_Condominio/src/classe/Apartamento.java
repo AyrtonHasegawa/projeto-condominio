@@ -69,8 +69,7 @@ public class Apartamento {
      public boolean verificaCampoVazioApartamento(Apartamento apartamento){
         boolean status = false;
         
-        if (apartamento.getNumeroApartamento() <= 0 || apartamento.getBlocoApartamento().equals("") ||
-                apartamento.getVagaApartamento_1().equals("") || apartamento.getVagaApartamento_2().equals("")) {
+        if (apartamento.getNumeroApartamento() <= 0 || apartamento.getBlocoApartamento().equals("")) {
             status = false;
         }else{
             status = true;
