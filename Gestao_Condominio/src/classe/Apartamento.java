@@ -15,8 +15,8 @@ import java.sql.Connection;
  * @author Windows_10
  */
 public class Apartamento {
-    private int codigoAparatamento, numeroApartamento;
-    private String blocoApartamento, vagaApartamento_1, vagaApartamento_2;
+    private int codigoAparatamento;
+    private String blocoApartamento, vagaApartamento_1, vagaApartamento_2, numeroApartamento;
     
     Connection conApartamento;
     PreparedStatement psApartamento;
@@ -24,11 +24,11 @@ public class Apartamento {
     ResultSet rsApartamento;
 
     //-----Getter-----
-    public int getCodigoAparatamento() {
+    public int getCodigoApartamento() {
         return codigoAparatamento;
     }
 
-    public int getNumeroApartamento() {
+    public String getNumeroApartamento() {
         return numeroApartamento;
     }
 
@@ -49,7 +49,7 @@ public class Apartamento {
         this.codigoAparatamento = codigoAparatamento;
     }
 
-    public void setNumeroApartamento(int numeroApartamento) {
+    public void setNumeroApartamento(String numeroApartamento) {
         this.numeroApartamento = numeroApartamento;
     }
 
@@ -69,7 +69,7 @@ public class Apartamento {
      public boolean verificaCampoVazioApartamento(Apartamento apartamento){
         boolean status = false;
         
-        if (apartamento.getNumeroApartamento() <= 0 || apartamento.getBlocoApartamento().equals("")) {
+        if (apartamento.getNumeroApartamento().equals("") || apartamento.getBlocoApartamento().equals("")) {
             status = false;
         }else{
             status = true;
@@ -77,4 +77,37 @@ public class Apartamento {
         
         return status;
     }
+     
+    //------------- Valida número do Apartamento -------------------
+     public Boolean validaNumeroApartamento(Apartamento apartamento) {
+         Boolean status = false;
+         
+         
+         try {
+             int numeroApartamento = Integer.parseInt(apartamento.getNumeroApartamento());
+             if(numeroApartamento <= 0) {
+                 status = false;
+             } else {
+                 status = true;
+             }
+             
+         } catch (Exception e) {
+             status = false;
+         }
+         
+         return status;
+     }
+     
+    //------------- Valida código do Apartamento -------------------
+     public Boolean validaCodigoApartameto(String cod) {
+         Boolean status = false;
+         
+         try {
+             int num = Integer.parseInt(cod);
+             status = true;
+         } catch (Exception e) {
+             status = false;
+         }
+         return status;
+     }
 }

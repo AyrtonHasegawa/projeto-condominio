@@ -61,8 +61,20 @@ public class DadosCondominio {
         return autenticado;
     }
     
+    //-------------- Valida Número -----------------
+    public static boolean validaNumero(String stringCheck, int radix) {
+        if(stringCheck.isEmpty()) return false;
+        for(int i = 0; i < stringCheck.length(); i++) {
+            if(i == 0 && stringCheck.charAt(i) == '-') {
+                if(stringCheck.length() ==1) return false;
+                else continue;
+            }
+            if(Character.digit(stringCheck.charAt(i), radix) < 0) return false;
+        }        
+        return true;
+    }
     //-------------- Novo Funcionario Aprovado-----------------
-    public ResultSet consultaGeral()
+    public ResultSet consultaGeralFuncionario()
     {
         sql = "select * from Tb_Funcionario";
         try {
@@ -243,7 +255,7 @@ public class DadosCondominio {
             
             if (rsCondominio.next()) {
                 apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
-                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
                 apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
                 apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
                 apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
@@ -266,7 +278,7 @@ public class DadosCondominio {
             
             if (rsCondominio.next()) {
                 apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
-                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
                 apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
                 apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
                 apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
@@ -279,16 +291,41 @@ public class DadosCondominio {
             return null;
         }
     }
+    
+    //verifice se já existe o apartamento no bloco
+    public Apartamento verificaExisteApartamento(String bloco, int numero) {
+        
+        sql = "SELECT * FROM tb_apartamento WHERE Ap_Bloco_Predio = ? AND Ap_Num_Apartamento = ?";
+        
+        try {
+            psCondominio = conCondominio.prepareStatement(sql);
+            psCondominio.setString(1, bloco);
+            psCondominio.setInt(2, numero);
+            rsCondominio = psCondominio.executeQuery();
+            
+            if(rsCondominio.next()) {
+                apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
+                apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
+                apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
+                apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
+                
+                return apartamento;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
   
     public String insereApartamento(Apartamento apartamento){
         sql = "INSERT INTO tb_apartamento ( Ap_Bloco_Predio,"
                 + "Ap_Num_Apartamento) VALUES(?,?)";
-        
         try{
             psCondominio = conCondominio.prepareStatement(sql);
             psCondominio.setString(1, apartamento.getBlocoApartamento());
-            psCondominio.setInt(2, apartamento.getNumeroApartamento());
-            
+            psCondominio.setString(2, apartamento.getNumeroApartamento());
             
             psCondominio.executeUpdate();
             msg = "Apartamento inserido com sucesso!";
@@ -312,13 +349,13 @@ public class DadosCondominio {
     }
     
     public String alterarApartamento(Apartamento apartamento){
-        sql = "UPDATE tb_apartamento SET Ap_Bloco_Predio = ?, Ap_Num_Apartamento = ?, "
+        sql = "UPDATE tb_apartamento SET Ap_Bloco_Predio = ?, Ap_Num_Apartamento = ? "
                 + "WHERE Ap_Cod_Apartamento = ?";
         try {
             psCondominio = conCondominio.prepareStatement(sql);
-            psCondominio.setInt(5, apartamento.getCodigoAparatamento());
-            psCondominio.setInt(1, apartamento.getNumeroApartamento());
-            psCondominio.setString(2, apartamento.getBlocoApartamento());
+            psCondominio.setInt(3, apartamento.getCodigoApartamento());
+            psCondominio.setString(2, apartamento.getNumeroApartamento());
+            psCondominio.setString(1, apartamento.getBlocoApartamento());
             psCondominio.executeUpdate();
             msg = "Dados do Funcionário alterado com sucesso!";
         } catch (Exception e) {
@@ -335,7 +372,7 @@ public class DadosCondominio {
             rsCondominio = psCondominio.executeQuery();
             if (rsCondominio.next()) {
                 apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
-                apartamento.setNumeroApartamento(rsCondominio.getInt("Ap_Num_Apartamento"));
+                apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
                 apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
                 apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
                 apartamento.setVagaApartamento_2(rsCondominio.getString("Ap_Num_Vaga2"));
