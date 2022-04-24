@@ -6,10 +6,10 @@
  */
 package view;
 
-
 import classe.DadosCondominio;
 import classe.Funcionario;
 import classe.Apartamento;
+import classe.Morador;
 import view.Login;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -20,25 +20,32 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ayrton Hasegawa
  */
+
 public class Principal extends javax.swing.JFrame {
 
     DadosCondominio dadosCondominio = new DadosCondominio();
     String salvar, user;
+
     ResultSet rsCondominio = dadosCondominio.consultaGeralFuncionario();
     ResultSet rsCondominioApartamento = dadosCondominio.consultaGeralApartamento();
+    ResultSet rsCondominioMorador = dadosCondominio.consultaGeralMorador();
+
+    Login login = new Login();
     Funcionario funcionario = new Funcionario();
     Apartamento apartamento = new Apartamento();
-    Login login = new Login();
-    
+    Morador morador = new Morador();
+
     public Principal() {
         initComponents();
         lblMsg.setText(dadosCondominio.getCon());
         //lblNome_Fun.setText(login.chama());
         exibeGridFuncionario(rsCondominio);
         exibeGridApartamento(rsCondominioApartamento);
+        exibeGridMorador(rsCondominioMorador);
         statusInicio();
     }
-    private void statusInicio(){
+
+    private void statusInicio() {
         statusInicioFuncionario(true);
         statusInicioApartamento(true);
         statusInicioMorador(true);
@@ -47,9 +54,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     //------------------------Funcionário----------------------------
-    private void statusInicioFuncionario(boolean status)
-    {
-        
+    private void statusInicioFuncionario(boolean status) {
         txtCodFun.setEnabled(!status);
         txtNomeFun.setEnabled(!status);
         txtCpfFun.setEnabled(!status);
@@ -58,19 +63,18 @@ public class Principal extends javax.swing.JFrame {
         txtEnderecoFun.setEnabled(!status);
         txtLoginFun.setEnabled(!status);
         txtSenhaFun.setEnabled(!status);
-        
+
         btnConsultarFun.setEnabled(status);
         btnIncluirFun.setEnabled(status);
         btnLocalizarCodFun.setEnabled(!status);
         btnLocalizarCpfFun.setEnabled(!status);
         btnExcluirFun.setEnabled(!status);
         btnSalvarFun.setEnabled(!status);
-        
         radioSimFun.setEnabled(!status);
         radioNaoFun.setEnabled(!status);
     }
-    private void statusConsultarFuncionario(boolean status)
-    {
+
+    private void statusConsultarFuncionario(boolean status) {
         txtCodFun.setEnabled(status);
         txtNomeFun.setEnabled(!status);
         txtCpfFun.setEnabled(status);
@@ -79,19 +83,19 @@ public class Principal extends javax.swing.JFrame {
         txtEnderecoFun.setEnabled(!status);
         txtLoginFun.setEnabled(!status);
         txtSenhaFun.setEnabled(!status);
-        
+
         btnConsultarFun.setEnabled(status);
         btnIncluirFun.setEnabled(status);
         btnLocalizarCodFun.setEnabled(status);
         btnLocalizarCpfFun.setEnabled(status);
         btnExcluirFun.setEnabled(!status);
         btnSalvarFun.setEnabled(!status);
-        
+
         radioSimFun.setEnabled(!status);
         radioNaoFun.setEnabled(!status);
     }
-    private void statusAlterarFuncionario(boolean status)
-    {
+
+    private void statusAlterarFuncionario(boolean status) {
         txtCodFun.setEnabled(!status);
         txtNomeFun.setEnabled(status);
         txtCpfFun.setEnabled(status);
@@ -100,19 +104,19 @@ public class Principal extends javax.swing.JFrame {
         txtEnderecoFun.setEnabled(status);
         txtLoginFun.setEnabled(!status);
         txtSenhaFun.setEnabled(status);
-        
+
         btnConsultarFun.setEnabled(status);
         btnIncluirFun.setEnabled(status);
         btnLocalizarCodFun.setEnabled(!status);
         btnLocalizarCpfFun.setEnabled(!status);
         btnExcluirFun.setEnabled(status);
         btnSalvarFun.setEnabled(status);
-        
+
         radioSimFun.setEnabled(status);
         radioNaoFun.setEnabled(status);
     }
-    private void statusIncluirFuncionario(boolean status)
-    {
+
+    private void statusIncluirFuncionario(boolean status) {
         txtCodFun.setEnabled(!status);
         txtNomeFun.setEnabled(status);
         txtCpfFun.setEnabled(status);
@@ -121,25 +125,25 @@ public class Principal extends javax.swing.JFrame {
         txtEnderecoFun.setEnabled(status);
         txtLoginFun.setEnabled(!status);
         txtSenhaFun.setEnabled(status);
-        
+
         btnConsultarFun.setEnabled(status);
         btnIncluirFun.setEnabled(!status);
         btnLocalizarCodFun.setEnabled(!status);
         btnLocalizarCpfFun.setEnabled(!status);
         btnExcluirFun.setEnabled(!status);
         btnSalvarFun.setEnabled(status);
-        
+
         radioSimFun.setEnabled(status);
         radioNaoFun.setEnabled(status);
     }
-    private void exibeGridFuncionario(ResultSet rs)
-    {
-        DefaultTableModel tabelaFun = new DefaultTableModel(null, new String[]
-                {"Código","CPF","Nome","Cargo",
-            "Telefone","Endereco","Ativo","Login"/*,"Senha"*/});
+
+    private void exibeGridFuncionario(ResultSet rs) {
+        DefaultTableModel tabelaFun = new DefaultTableModel(null, new String[]{"Código", "CPF", "Nome", "Cargo",
+            "Telefone", "Endereco", "Ativo", "Login"/*,"Senha"*/});
+
         try {
             rs.first();
-            while (!rs.isAfterLast()) {                
+            while (!rs.isAfterLast()) {
                 String[] dados = new String[8];
                 dados[0] = rs.getString("Fun_Cod_Funcionario");
                 dados[1] = rs.getString("Fun_CPF");
@@ -149,17 +153,17 @@ public class Principal extends javax.swing.JFrame {
                 dados[5] = rs.getString("Fun_Endereco");
                 dados[6] = rs.getString("Fun_Ativo");
                 dados[7] = rs.getString("Fun_Login");
-                //dados[8] = rs.getString("Fun_Senha");
-                
+
                 tabelaFun.addRow(dados);
                 rs.next();
             }
         } catch (Exception e) {
         }
-        tabelaFuncionario.setModel(tabelaFun);
+
+        jTableFuncionario.setModel(tabelaFun);
     }
-    private void LimparFuncionario()
-    {
+
+    private void limparFuncionario() {
         txtCodFun.setText("");
         txtNomeFun.setText("");
         txtCpfFun.setText("");
@@ -170,162 +174,196 @@ public class Principal extends javax.swing.JFrame {
         txtSenhaFun.setText("123456");
         grupoBotaoFuncionario.clearSelection();
     }
-    
+
     //------------------- Apartamento --------------------------
-    private void statusInicioApartamento(boolean status){
-        
+    private void statusInicioApartamento(boolean status) {
+
         txtCodApartamento.setEnabled(!status);
         txtBlocoApartamento.setEnabled(!status);
         txtNumeroApartamento.setEnabled(!status);
         txtEstacionamento1.setEnabled(!status);
         txtEstacionamento2.setEnabled(!status);
-        
+
         btnIncluirApartamento.setEnabled(status);
         btnExcluirApartamento.setEnabled(!status);
         btnSalvarApartamento.setEnabled(!status);
         btnLocalizarCodApartamento.setEnabled(!status);
     }
-    private void statusConsultarApartamento(boolean status){
-        
+
+    private void statusConsultarApartamento(boolean status) {
         txtCodApartamento.setEnabled(status);
         txtBlocoApartamento.setEnabled(!status);
         txtNumeroApartamento.setEnabled(!status);
         txtEstacionamento1.setEnabled(!status);
         txtEstacionamento2.setEnabled(!status);
-        
+
         btnIncluirApartamento.setEnabled(status);
         btnExcluirApartamento.setEnabled(!status);
         btnSalvarApartamento.setEnabled(!status);
         btnLocalizarCodApartamento.setEnabled(status);
     }
-    private void statusAlterarApartamento(boolean status){
-        
+
+    private void statusAlterarApartamento(boolean status) {
         txtCodApartamento.setEnabled(!status);
         txtBlocoApartamento.setEnabled(status);
         txtNumeroApartamento.setEnabled(status);
         txtEstacionamento1.setEnabled(!status);
         txtEstacionamento2.setEnabled(!status);
-        
+
         btnIncluirApartamento.setEnabled(status);
         btnExcluirApartamento.setEnabled(status);
         btnSalvarApartamento.setEnabled(status);
         btnLocalizarCodApartamento.setEnabled(!status);
     }
-    private void statusIncluirApartamento(boolean status){
-        
+
+    private void statusIncluirApartamento(boolean status) {
+
         txtCodApartamento.setEnabled(!status);
         txtBlocoApartamento.setEnabled(status);
         txtNumeroApartamento.setEnabled(status);
         txtEstacionamento1.setEnabled(!status);
         txtEstacionamento2.setEnabled(!status);
-        
+
         btnIncluirApartamento.setEnabled(!status);
         btnExcluirApartamento.setEnabled(!status);
         btnSalvarApartamento.setEnabled(status);
         btnLocalizarCodApartamento.setEnabled(!status);
     }
-    private void exibeGridApartamento(ResultSet rs){
-        DefaultTableModel tabelaApart = new DefaultTableModel(null, new String[]
-                {"Código do Apartamento","Bloco do Prédio","Número do Apartamento",
-            "Estacionamento vaga 1","Estacionamento vaga 2"});
+
+    private void exibeGridApartamento(ResultSet rs) {
+        DefaultTableModel tabelaApart = new DefaultTableModel(null, new String[]{"Código do Apartamento", "Bloco do Prédio", "Número do Apartamento",
+            "Estacionamento vaga 1", "Estacionamento vaga 2"});
         try {
             rs.first();
-            while (!rs.isAfterLast()) {                
+            while (!rs.isAfterLast()) {
                 String[] dados = new String[5];
                 dados[0] = rs.getString("Ap_Cod_Apartamento");
                 dados[1] = rs.getString("Ap_Bloco_Predio");
                 dados[2] = rs.getString("Ap_Num_Apartamento");
                 dados[3] = rs.getString("Ap_Num_Vaga1");
                 dados[4] = rs.getString("Ap_Num_Vaga2");
-                
+
                 tabelaApart.addRow(dados);
                 rs.next();
             }
         } catch (Exception e) {
         }
-        tabelaApartamento.setModel(tabelaApart);
+        jTableApartamento.setModel(tabelaApart);
     }
-    private void LimparApartamento(){
+
+    private void limparApartamento() {
         txtCodApartamento.setText("");
         txtBlocoApartamento.setText("");
         txtNumeroApartamento.setText("");
         txtEstacionamento1.setText("");
         txtEstacionamento2.setText("");
-        
     }
-    
+
     //------------------- Morador ------------------
-    private void statusInicioMorador(boolean status){
+    private void statusInicioMorador(boolean status) {
         txtCpfMorador.setEnabled(!status);
         txtNomeMorador.setEnabled(!status);
         txtTelefoneMorador.setEnabled(!status);
         txtEmailMorador.setEnabled(!status);
         txtBlocoApartamentoMorador.setEnabled(!status);
         txtNumeroApartamentoMorador.setEnabled(!status);
-       
+
         btnIncluirMorador.setEnabled(status);
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(!status);
         btnLocalizarCpfMorador.setEnabled(!status);
         btnLocalizarNomeMorador.setEnabled(!status);
-        
+
         radioSimMorador.setEnabled(!status);
         radioNaoMorador.setEnabled(!status);
     }
-    private void statusConsultarMorador(boolean status){
+
+    private void statusConsultarMorador(boolean status) {
         txtCpfMorador.setEnabled(status);
         txtNomeMorador.setEnabled(status);
         txtTelefoneMorador.setEnabled(!status);
         txtEmailMorador.setEnabled(!status);
         txtBlocoApartamentoMorador.setEnabled(!status);
         txtNumeroApartamentoMorador.setEnabled(!status);
-       
+
         btnIncluirMorador.setEnabled(status);
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(!status);
         btnLocalizarCpfMorador.setEnabled(status);
         btnLocalizarNomeMorador.setEnabled(status);
-        
         radioSimMorador.setEnabled(!status);
         radioNaoMorador.setEnabled(!status);
     }
-    private void statusAlterarMorador(boolean status){
+
+    private void statusAlterarMorador(boolean status) {
         txtCpfMorador.setEnabled(status);
         txtNomeMorador.setEnabled(status);
         txtTelefoneMorador.setEnabled(status);
         txtEmailMorador.setEnabled(status);
         txtBlocoApartamentoMorador.setEnabled(status);
         txtNumeroApartamentoMorador.setEnabled(status);
-       
+
         btnIncluirMorador.setEnabled(status);
         btnExcluirMorador.setEnabled(status);
         btnSalvarMorador.setEnabled(status);
         btnLocalizarCpfMorador.setEnabled(!status);
         btnLocalizarNomeMorador.setEnabled(!status);
-        
         radioSimMorador.setEnabled(status);
         radioNaoMorador.setEnabled(status);
     }
-    private void statusIncluirMorador(boolean status){
+
+    private void statusIncluirMorador(boolean status) {
         txtCpfMorador.setEnabled(status);
         txtNomeMorador.setEnabled(status);
         txtTelefoneMorador.setEnabled(status);
         txtEmailMorador.setEnabled(status);
         txtBlocoApartamentoMorador.setEnabled(status);
         txtNumeroApartamentoMorador.setEnabled(status);
-       
+
         btnIncluirMorador.setEnabled(!status);
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(status);
         btnLocalizarCpfMorador.setEnabled(!status);
         btnLocalizarNomeMorador.setEnabled(!status);
-        
         radioSimMorador.setEnabled(status);
         radioNaoMorador.setEnabled(status);
     }
-    
+
+    private void exibeGridMorador(ResultSet rs) {
+        DefaultTableModel tabelaMorador = new DefaultTableModel(null, new String[]{"Cpf do Morador", "Nome do Morador", "Telefone do Morador",
+            "Email do Morador", "Cód. do Apartamento", "Bloco do Prédio", "Num. do Apartamento"});
+
+        try {
+            rs.first();
+            while (!rs.isAfterLast()) {
+                String[] dados = new String[7];
+                dados[0] = rs.getString("Mor_CPF");
+                dados[1] = rs.getString("Mor_Nome");
+                dados[2] = rs.getString("Mor_Email");
+                dados[3] = rs.getString("Mor_Telefone");
+                dados[4] = rs.getString("Mor_Ativo");
+                dados[5] = rs.getString("Mor_Cod_Apartamento");
+
+                tabelaMorador.addRow(dados);
+                rs.next();
+            }
+        } catch (Exception e) {
+        }
+        jTableMorador.setModel(tabelaMorador);
+    }
+
+    private void limparMorador() {
+        txtCpfMorador.setText("");
+        txtNomeMorador.setText("");
+        txtTelefoneMorador.setText("");
+        txtEmailMorador.setText("");
+        txtBlocoApartamentoMorador.setText("");
+        txtNumeroApartamentoMorador.setText("");
+        grupoBotaoMorador.clearSelection();
+    }
+
     //------------------- Visita ------------------
-    private void statusInicioVisita(boolean status){
+    private void statusInicioVisita(boolean status) {
         txtDataVisita.setEnabled(!status);
         txtHoraVisita.setEnabled(!status);
         txtCpfVisitanteVisita.setEnabled(!status);
@@ -333,15 +371,15 @@ public class Principal extends javax.swing.JFrame {
         txtCpfMoradorVisita.setEnabled(!status);
         txtTelefoneMoradorVisita.setEnabled(!status);
         txtNomeMoradorVisita.setEnabled(!status);
-       
+
         btnIncluirVisita.setEnabled(status);
         btnIncluirVisitanteLista.setEnabled(!status);
         btnExcluirVisitanteLista.setEnabled(!status);
         btnExcluirVisita.setEnabled(!status);
-        
     }
+
     //------------------- Veículo ------------------
-    private void statusInicioVeiculo(boolean status){
+    private void statusInicioVeiculo(boolean status) {
         txtPlacaVeiculo.setEnabled(!status);
         txtModeloVeiculo.setEnabled(!status);
         txtCorVeiculo.setEnabled(!status);
@@ -350,13 +388,14 @@ public class Principal extends javax.swing.JFrame {
         txtNomeMoradorVeiculo.setEnabled(!status);
         txtBlocoApartamentoVeiculo.setEnabled(!status);
         txtNumeroApartamentoVeiculo.setEnabled(!status);
-       
+
         btnConsultarVeiculo.setEnabled(status);
         btnIncluirVeiculo.setEnabled(!status);
-        btnExcluirVeiculo.setEnabled(!status);        
+        btnExcluirVeiculo.setEnabled(!status);
     }
-    
+
     @SuppressWarnings("unchecked")
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -391,7 +430,7 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirFun = new javax.swing.JButton();
         btnLimparFun = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tabelaFuncionario = new javax.swing.JTable();
+        jTableFuncionario = new javax.swing.JTable();
         btnSalvarFun = new javax.swing.JButton();
         btnLocalizarCpfFun = new javax.swing.JButton();
         btnIncluirFun = new javax.swing.JButton();
@@ -406,7 +445,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tabelaMorador = new javax.swing.JTable();
+        jTableMorador = new javax.swing.JTable();
         btnConsultarMorador = new javax.swing.JButton();
         btnIncluirMorador = new javax.swing.JButton();
         btnLimparMorador = new javax.swing.JButton();
@@ -446,7 +485,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel67 = new javax.swing.JLabel();
         txtDataVisita = new javax.swing.JTextField();
         jScrollPane7 = new javax.swing.JScrollPane();
-        tabelaHistoricoVisita = new javax.swing.JTable();
+        jTableHistoricoVisita = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         tabelaMoradorVisita = new javax.swing.JTable();
         jLabel69 = new javax.swing.JLabel();
@@ -468,7 +507,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tabelaVisitante = new javax.swing.JTable();
+        jTableVisitante = new javax.swing.JTable();
         btnLimparVisitante = new javax.swing.JButton();
         btnExcluirVisitante = new javax.swing.JButton();
         btnSalvarVisitante = new javax.swing.JButton();
@@ -481,7 +520,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tabelaApartamento = new javax.swing.JTable();
+        jTableApartamento = new javax.swing.JTable();
         btnConsultarApartamento = new javax.swing.JButton();
         btnIncluirApartamento = new javax.swing.JButton();
         jLabel75 = new javax.swing.JLabel();
@@ -502,7 +541,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tabelaVeiculo = new javax.swing.JTable();
+        jTableVeiculo = new javax.swing.JTable();
         btnConsultarVeiculo = new javax.swing.JButton();
         btnIncluirVeiculo = new javax.swing.JButton();
         jLabel80 = new javax.swing.JLabel();
@@ -677,8 +716,8 @@ public class Principal extends javax.swing.JFrame {
         });
         painelFuncionario.add(btnLimparFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 200, -1, -1));
 
-        tabelaFuncionario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaFuncionario.setModel(new javax.swing.table.DefaultTableModel(
+        jTableFuncionario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -689,13 +728,13 @@ public class Principal extends javax.swing.JFrame {
                 "Código", "Cpf", "Nome", "Cargo", "Telefone", "Endereço", "Ativo", "Login", "Senha"
             }
         ));
-        tabelaFuncionario.setRowHeight(22);
-        tabelaFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableFuncionario.setRowHeight(22);
+        jTableFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaFuncionarioMouseClicked(evt);
+                jTableFuncionarioMouseClicked(evt);
             }
         });
-        jScrollPane4.setViewportView(tabelaFuncionario);
+        jScrollPane4.setViewportView(jTableFuncionario);
 
         painelFuncionario.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 1100, 170));
 
@@ -767,8 +806,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel34.setText("Lista de Moradores");
         painelMorador.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
-        tabelaMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaMorador.setModel(new javax.swing.table.DefaultTableModel(
+        jTableMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableMorador.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -776,10 +815,15 @@ public class Principal extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Cpf", "Nome", "Telefone", "Email", "Código do Apartamento", "Bloco do Prédio", "Número do Apartamento"
+                "Cpf do morador", "Nome do morador", "Telefone do morador", "Email do morador", "Código do Apartamento", "Bloco do Prédio", "Número do Apartamento"
             }
         ));
-        jScrollPane2.setViewportView(tabelaMorador);
+        jTableMorador.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMoradorMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTableMorador);
 
         painelMorador.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 1080, 170));
 
@@ -853,6 +897,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnExcluirMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluirMorador.setText("Excluir Morador");
+        btnExcluirMorador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirMoradorActionPerformed(evt);
+            }
+        });
         painelMorador.add(btnExcluirMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, -1, -1));
 
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -981,8 +1030,8 @@ public class Principal extends javax.swing.JFrame {
         txtDataVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         painelVisita.add(txtDataVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 100, -1));
 
-        tabelaHistoricoVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaHistoricoVisita.setModel(new javax.swing.table.DefaultTableModel(
+        jTableHistoricoVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableHistoricoVisita.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -993,7 +1042,7 @@ public class Principal extends javax.swing.JFrame {
                 "Cód. da Visita", "Data da Visita", "Hora da Visita", "CPF Morador", "CPF Visitante"
             }
         ));
-        jScrollPane7.setViewportView(tabelaHistoricoVisita);
+        jScrollPane7.setViewportView(jTableHistoricoVisita);
 
         painelVisita.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 880, 130));
 
@@ -1090,8 +1139,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel12.setText("Lista de Visitante");
         painelVisitante.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 320, -1));
 
-        tabelaVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaVisitante.setModel(new javax.swing.table.DefaultTableModel(
+        jTableVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableVisitante.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -1102,7 +1151,7 @@ public class Principal extends javax.swing.JFrame {
                 "Cpf", "Nome"
             }
         ));
-        jScrollPane6.setViewportView(tabelaVisitante);
+        jScrollPane6.setViewportView(jTableVisitante);
 
         painelVisitante.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 1100, 260));
 
@@ -1158,8 +1207,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel10.setText("Apartamento");
         painelApartamento.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, -1));
 
-        tabelaApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaApartamento.setModel(new javax.swing.table.DefaultTableModel(
+        jTableApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableApartamento.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -1170,12 +1219,12 @@ public class Principal extends javax.swing.JFrame {
                 "Código do Apartamento", "Bloco do Prédio", "Nº do Apartamento", "Estacionamento 1", "Estacionamento 2"
             }
         ));
-        tabelaApartamento.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableApartamento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaApartamentoMouseClicked(evt);
+                jTableApartamentoMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(tabelaApartamento);
+        jScrollPane3.setViewportView(jTableApartamento);
 
         painelApartamento.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 1100, 210));
 
@@ -1280,8 +1329,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel11.setText("Veículo");
         painelVeiculo.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, -1));
 
-        tabelaVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaVeiculo.setModel(new javax.swing.table.DefaultTableModel(
+        jTableVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableVeiculo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -1292,7 +1341,7 @@ public class Principal extends javax.swing.JFrame {
                 "Placa", "Fabricante", "Modelo", "Cor", "Bloco do Apartamento", "Número do Apartamento"
             }
         ));
-        jScrollPane5.setViewportView(tabelaVeiculo);
+        jScrollPane5.setViewportView(jTableVeiculo);
 
         painelVeiculo.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 1110, 150));
 
@@ -1466,374 +1515,514 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        
+
         System.exit(0);
     }//GEN-LAST:event_btnSairActionPerformed
+
 
     private void btnConsultarFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarFunActionPerformed
 
         salvar = "Alterar";
         grupoBotaoFuncionario.clearSelection();
         statusConsultarFuncionario(true);
-        LimparFuncionario();
+        limparFuncionario();
     }//GEN-LAST:event_btnConsultarFunActionPerformed
 
     private void btnLimparFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparFunActionPerformed
-        LimparFuncionario();
+
+        limparFuncionario();
         statusInicioFuncionario(true);
         salvar = "";
     }//GEN-LAST:event_btnLimparFunActionPerformed
 
     private void btnSalvarFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarFunActionPerformed
-        
-        setarFuncionario();
+
+        setFuncionario();
         String msg;
         boolean status = funcionario.verificaCampoVazio(funcionario);
+
         if (status == false) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", 
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio",
                     JOptionPane.ERROR_MESSAGE);
-        }else{
+        } else {
             Funcionario funcionarioExistente = new Funcionario();
-            funcionarioExistente = dadosCondominio.consultaCpf(txtCpfFun.getText());
-            
+            funcionarioExistente = dadosCondominio.consultaCpfFuncionario(txtCpfFun.getText());
+
 //--------------------------Incluir------------------------            
             if (salvar.equals("Incluir")) {
-                setarFuncionario();
+                setFuncionario();
                 if (funcionarioExistente == null) {
-                    if (funcionario.validaCPF(funcionario) == "ok") {                        
-                        if (funcionario.validaNome(funcionario) == true) {                            
+                    if (funcionario.validaCPF(funcionario) == "ok") {
+                        if (funcionario.validaNome(funcionario) == true) {
                             if (funcionario.validaTelefone(funcionario) == "ok") {
-                                if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Funcionário?", 
-                                "Incluir Funcionário", JOptionPane.YES_NO_OPTION) == 0) {
-                                msg = dadosCondominio.insereFuncionario(funcionario);
-                                JOptionPane.showMessageDialog(this, msg, "Incluir Funcionário", JOptionPane.INFORMATION_MESSAGE);
-                                LimparFuncionario();
-                                statusInicioFuncionario(true);
-                                exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+                                if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Funcionário?",
+                                        "Incluir Funcionário", JOptionPane.YES_NO_OPTION) == 0) {
+                                    msg = dadosCondominio.insereFuncionario(funcionario);
+                                    JOptionPane.showMessageDialog(this, msg, "Incluir Funcionário", JOptionPane.INFORMATION_MESSAGE);
+                                    limparFuncionario();
+                                    statusInicioFuncionario(true);
+                                    exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
                                 }
-                            }else {
-                                JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario), 
+                            } else {
+                                JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario),
                                         "Telefone inválido", JOptionPane.ERROR_MESSAGE);
-                            }    
-                        }else {
-                            JOptionPane.showMessageDialog(this, "Por favor digite o nome corretamente", 
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Por favor digite o nome corretamente",
                                     "Nome incorreto", JOptionPane.ERROR_MESSAGE);
-                        }    
-                    }else {
-                        JOptionPane.showMessageDialog(this, funcionario.validaCPF(funcionario), 
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, funcionario.validaCPF(funcionario),
                                 "CPF inválido", JOptionPane.ERROR_MESSAGE);
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Digite outro CPF", "CPF digitado já existe!", JOptionPane.ERROR_MESSAGE);
                     txtCpfFun.setText("");
-                }                
+                }
+
 //--------------------------Alterar------------------------                
-            }else if (salvar.equals("Alterar")) {
-                setarFuncionario();
+            } else if (salvar.equals("Alterar")) {
+                setFuncionario();
                 funcionario.setCod_Fun(Integer.parseInt(txtCodFun.getText()));
                 int codFun = funcionario.getCod_Fun(), codFunE = funcionarioExistente.getCod_Fun();
-                //-----------------Verifica CPF--------------                
-                if (funcionarioExistente == null || funcionarioExistente.getCod_Fun() == 
-                        funcionario.getCod_Fun()) {                    
-                    if (funcionario.validaCPF(funcionario).equals("ok")) {                        
-                        if (funcionario.validaNome(funcionario) == true) {
-                            
-                            if (funcionario.validaTelefone(funcionario) == "ok") {
-                                if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Funcionario?", 
-                                "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
-                                setarFuncionario();
-                                msg = dadosCondominio.alteraFuncionario(funcionario);
-                                JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
 
-                                LimparFuncionario();
-                                statusInicioFuncionario(true);
-                                exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+                //-----------------Verifica CPF--------------                
+                if (funcionarioExistente == null || funcionarioExistente.getCod_Fun()
+                        == funcionario.getCod_Fun()) {
+                    if (funcionario.validaCPF(funcionario).equals("ok")) {
+                        if (funcionario.validaNome(funcionario) == true) {
+                            if (funcionario.validaTelefone(funcionario) == "ok") {
+                                if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Funcionario?",
+                                        "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                    setFuncionario();
+                                    msg = dadosCondominio.alteraFuncionario(funcionario);
+                                    JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                    limparFuncionario();
+                                    statusInicioFuncionario(true);
+                                    exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
                                 }
-                            }else {
-                                JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario), 
+                            } else {
+                                JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario),
                                         "Telefone inválido", JOptionPane.ERROR_MESSAGE);
-                            }    
-                        }else {
-                            JOptionPane.showMessageDialog(this, "Por favor digite o nome corretamente", 
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Por favor digite o nome corretamente",
                                     "Nome incorreto", JOptionPane.ERROR_MESSAGE);
-                        }    
-                    }else {
-                        JOptionPane.showMessageDialog(this, funcionario.validaCPF(funcionario), 
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, funcionario.validaCPF(funcionario),
                                 "CPF inválido", JOptionPane.ERROR_MESSAGE);
                     }
-                    
                 } else {
                     JOptionPane.showMessageDialog(null, "Digite outro CPF", "CPF digitado já existe", JOptionPane.ERROR_MESSAGE);
                     txtCpfFun.setText("");
-                }             
+                }
             }
         }
     }//GEN-LAST:event_btnSalvarFunActionPerformed
 
     private void btnIncluirFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirFunActionPerformed
-        
+
         salvar = "Incluir";
         grupoBotaoFuncionario.clearSelection();
         statusIncluirFuncionario(true);
-        LimparFuncionario();
+        limparFuncionario();
     }//GEN-LAST:event_btnIncluirFunActionPerformed
 
     private void btnConsultarMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarMoradorActionPerformed
-        // TODO add your handling code here:
+
+        salvar = "Alterar";
+        grupoBotaoMorador.clearSelection();
         statusConsultarMorador(true);
+        limparMorador();
     }//GEN-LAST:event_btnConsultarMoradorActionPerformed
 
     private void btnIncluirMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirMoradorActionPerformed
-        // TODO add your handling code here:
+
+        salvar = "Incluir";
+        grupoBotaoMorador.clearSelection();
         statusIncluirMorador(true);
+        limparMorador();
     }//GEN-LAST:event_btnIncluirMoradorActionPerformed
 
     private void btnLimparMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparMoradorActionPerformed
-        // TODO add your handling code here:
+
+        limparMorador();
+        statusInicioMorador(true);
     }//GEN-LAST:event_btnLimparMoradorActionPerformed
 
     private void btnSalvarMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarMoradorActionPerformed
-        // TODO add your handling code here:
+
+        setMorador();
+        String msg;
+        boolean statusCampoVazio = morador.verificaCampoVazio(morador);
+        String cpfValido = dadosCondominio.validaCpf(morador.getCpfMorador());
+        String verificaNumeroCpf = dadosCondominio.validaNumero(morador.getCpfMorador(), 20);
+        Apartamento existeApartamento = dadosCondominio.verificaExisteApartamento(
+                morador.getBlocoApartamentoMorador(), Integer.parseInt(morador.getNumeroApartamentoMorador()));
+
+        if (existeApartamento != null) {
+            int codigoApartamento = existeApartamento.getCodigoApartamento();
+
+            if (statusCampoVazio != false) {
+                if (verificaNumeroCpf.equals("Numero")) {
+                    if (cpfValido.equals("Ok")) {
+                        if (dadosCondominio.validaNome(morador.getNomeMorador()) == true) {
+
+//--------------------------Inserir Morador------------------------
+                            if (salvar.equals("Incluir")) {
+                                if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Morador?",
+                                        "Incluir Morador", JOptionPane.YES_NO_OPTION) == 0) {
+                                    msg = dadosCondominio.insereMorador(morador, codigoApartamento);
+                                    JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
+                                    limparMorador();
+                                    statusInicioMorador(true);
+                                    exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                }
+
+//--------------------------Alterar Morador------------------------
+                            } else if (salvar.equals("Alterar")) {
+                                if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Morador?",
+                                        "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                    setMorador();
+                                    msg = dadosCondominio.alteraMorador(morador, codigoApartamento);
+                                    JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                    limparMorador();
+                                    statusInicioMorador(true);
+                                    exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                }
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
+                                    "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, cpfValido,
+                                "CPF Incorreto", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Digite apenas numeros, sem ponto.",
+                            "CPF Inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
+                        "Campo vazio", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Apartamento " + morador.getNumeroApartamentoMorador() +
+                    ", Bloco " + morador.getBlocoApartamentoMorador() + " não existe.",
+                    "Apartamento não cadastrado", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSalvarMoradorActionPerformed
 
     private void btnIncluirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitaActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIncluirVisitaActionPerformed
 
     private void btnLimparVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVisitaActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparVisitaActionPerformed
 
     private void btnExcluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitanteListaActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExcluirVisitanteListaActionPerformed
 
     private void btnSalvarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitaActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalvarVisitaActionPerformed
 
     private void btnLimparVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVisitanteActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparVisitanteActionPerformed
 
     private void btnSalvarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitanteActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalvarVisitanteActionPerformed
 
     private void btnConsultarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarApartamentoActionPerformed
+
         salvar = "Alterar";
         statusConsultarApartamento(true);
-        LimparApartamento();
+        limparApartamento();
     }//GEN-LAST:event_btnConsultarApartamentoActionPerformed
 
     private void btnIncluirApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirApartamentoActionPerformed
+
         salvar = "Incluir";
-        LimparApartamento();
+        limparApartamento();
         statusIncluirApartamento(true);
     }//GEN-LAST:event_btnIncluirApartamentoActionPerformed
 
     private void btnLimparApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparApartamentoActionPerformed
-        LimparApartamento();
+
+        limparApartamento();
         statusInicioApartamento(true);
     }//GEN-LAST:event_btnLimparApartamentoActionPerformed
 
     private void btnSalvarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarApartamentoActionPerformed
-        
-        setarApartamento();
+
+        setApartamento();
         String msg, bloco = apartamento.getBlocoApartamento();
         int numAp = Integer.parseInt(apartamento.getNumeroApartamento());
         boolean status = apartamento.verificaCampoVazioApartamento(apartamento);
-        
+
         if (status == false) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", 
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio",
                     JOptionPane.ERROR_MESSAGE);
-        }else {
-            
-            if(apartamento.validaNumeroApartamento(apartamento) == true) {
-                
-                if(dadosCondominio.verificaExisteApartamento(bloco, numAp) == null) {
+        } else {
+            if (apartamento.validaNumeroApartamento(apartamento) == true) {
+                if (dadosCondominio.verificaExisteApartamento(bloco, numAp) == null) {
 
 //--------------------------Incluir Apartamento------------------------                    
-                    if(salvar.equals("Incluir")) {
-                        setarApartamento();
-                        
-                        if(JOptionPane.showConfirmDialog(this, "Deseja Incluir o Apartamento?",
-                                "Incluir Apartamento", JOptionPane.YES_NO_OPTION) == 0){
+                    if (salvar.equals("Incluir")) {
+                        setApartamento();
+                        if (JOptionPane.showConfirmDialog(this, "Deseja Incluir o Apartamento?",
+                                "Incluir Apartamento", JOptionPane.YES_NO_OPTION) == 0) {
                             msg = dadosCondominio.insereApartamento(apartamento);
                             JOptionPane.showMessageDialog(this, msg, "Incluir Apartamento", JOptionPane.INFORMATION_MESSAGE);
-                            LimparApartamento();
+                            limparApartamento();
                             statusInicioApartamento(true);
                             exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
                         }
-                        
+
 //--------------------------Alterar Apartamento------------------------                         
-                    } else if(salvar.equals("Alterar")){
-                    setarApartamento();
-                    apartamento.setCodigoAparatamento(Integer.parseInt(txtCodApartamento.getText()));
+                    } else if (salvar.equals("Alterar")) {
+                        setApartamento();
+                        apartamento.setCodigoAparatamento(Integer.parseInt(txtCodApartamento.getText()));
 
-                    if(JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Apartamento?",
-                            "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
-                        setarApartamento();
-                        msg = dadosCondominio.alterarApartamento(apartamento);
-                        JOptionPane.showMessageDialog(this, msg, "Alterar dados", 
-                                JOptionPane.INFORMATION_MESSAGE);
+                        if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Apartamento?",
+                                "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                            setApartamento();
+                            msg = dadosCondominio.alterarApartamento(apartamento);
+                            JOptionPane.showMessageDialog(this, msg, "Alterar dados",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-                        LimparApartamento();
-                        statusInicioApartamento(true);
-                        exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                            limparApartamento();
+                            statusInicioApartamento(true);
+                            exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                        }
                     }
-                }
-                    
                 } else {
                     JOptionPane.showMessageDialog(this, "Digite outro número para o bloco do apartamento",
                             "Apartamento já cadastrado!", JOptionPane.ERROR_MESSAGE);
                 }
-                
             } else {
-            JOptionPane.showMessageDialog(this, "Digite apenas números maior que zero no campo do número do apartamento", 
-                    "Número invalido!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Digite apenas números maior que zero no campo do número do apartamento",
+                        "Número invalido!", JOptionPane.ERROR_MESSAGE);
             }
-        } 
+        }
     }//GEN-LAST:event_btnSalvarApartamentoActionPerformed
 
     private void btnConsultarVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarVeiculoActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnConsultarVeiculoActionPerformed
 
     private void btnIncluirVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVeiculoActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIncluirVeiculoActionPerformed
 
     private void btnLimparVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVeiculoActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparVeiculoActionPerformed
 
     private void btnSalvarVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVeiculoActionPerformed
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalvarVeiculoActionPerformed
 
     private void btnLocalizarCodFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCodFunActionPerformed
+
         salvar = "Alterar";
         statusConsultarFuncionario(true);
-        
-        if(dadosCondominio.validaNumero(txtCodFun.getText(), 10)) {
+        System.out.println("valida ----> " + dadosCondominio.validaNumero(txtCodFun.getText(), 10));
+
+        if (dadosCondominio.validaNumero(txtCodFun.getText(), 10) == "Numero") {
             funcionario = dadosCondominio.consultaCodigoFuncionario(Integer.parseInt(txtCodFun.getText()));
             if (funcionario == null) {
                 JOptionPane.showMessageDialog(this, "Código não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                 statusInicioFuncionario(true);
-                LimparFuncionario();
-            }else{
-                pegarFuncionario();
+                limparFuncionario();
+            } else {
+                getFuncionario();
                 statusAlterarFuncionario(true);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Digite apenas números!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-               
+
     }//GEN-LAST:event_btnLocalizarCodFunActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        // TODO add your handling code here:
+
         Login login = new Login();
         login.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnLocalizarCpfFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfFunActionPerformed
-        // TODO add your handling code here:
-        
+
         salvar = "Alterar";
         statusAlterarFuncionario(true);
         String cpf = txtCpfFun.getText();
-        funcionario = dadosCondominio.consultaCpf(cpf);
+        funcionario = dadosCondominio.consultaCpfFuncionario(cpf);
         if (funcionario == null) {
-            JOptionPane.showMessageDialog(this, "Funcionário não encontrado", "CPF não cadastrado", 
+            JOptionPane.showMessageDialog(this, "Funcionário não encontrado", "CPF não cadastrado",
                     JOptionPane.ERROR_MESSAGE);
             statusInicioFuncionario(true);
-            LimparFuncionario();
-        }else{
-            pegarFuncionario();
+            limparFuncionario();
+        } else {
+            getFuncionario();
             statusAlterarFuncionario(true);
-        }       
+        }
     }//GEN-LAST:event_btnLocalizarCpfFunActionPerformed
 
-    private void tabelaFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFuncionarioMouseClicked
+    private void jTableFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFuncionarioMouseClicked
 
         salvar = "Alterar";
         statusAlterarFuncionario(true);
-        int posicao = tabelaFuncionario.getSelectedRow();
-        String ativo = (String) tabelaFuncionario.getValueAt(posicao, 6);
-        funcionario = dadosCondominio.consultaCpf(String.valueOf(tabelaFuncionario.getValueAt(posicao, 1)));
-        pegarFuncionario();
-    }//GEN-LAST:event_tabelaFuncionarioMouseClicked
+        int posicao = jTableFuncionario.getSelectedRow();
+        String ativo = (String) jTableFuncionario.getValueAt(posicao, 6);
+        funcionario = dadosCondominio.consultaCpfFuncionario(String.valueOf(jTableFuncionario.getValueAt(posicao, 1)));
+        getFuncionario();
+    }//GEN-LAST:event_jTableFuncionarioMouseClicked
 
     private void btnExcluirFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirFunActionPerformed
-        
-        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o funcionário " + 
-                txtNomeFun.getText() + " do banco de dados?", "Excluir Funcionário", 
+
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o funcionário "
+                + txtNomeFun.getText() + " do banco de dados?", "Excluir Funcionário",
                 JOptionPane.YES_NO_OPTION) == 0) {
             String codigo = txtCodFun.getText();
             dadosCondominio.excluiFuncionario(codigo);
             exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
-            LimparFuncionario();
+            limparFuncionario();
         }
     }//GEN-LAST:event_btnExcluirFunActionPerformed
 
     private void btnLocalizarCodApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCodApartamentoActionPerformed
+
         salvar = "Alterar";
         statusAlterarApartamento(true);
-        boolean codApart = dadosCondominio.validaNumero(txtCodApartamento.getText(), 10);        
-        
-        if(codApart == true) {
+        String codApart = dadosCondominio.validaNumero(txtCodApartamento.getText(), 10);
+
+        if (codApart == "Numero") {
             apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(txtCodApartamento.getText()));
-            if(apartamento == null) {
+            if (apartamento == null) {
                 JOptionPane.showMessageDialog(this, "Código não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                 statusInicioApartamento(true);
-                LimparApartamento();
+                limparApartamento();
             } else {
-                pegarApartamento();
+                getApartamento();
                 statusAlterarApartamento(true);
                 System.out.println("2" + apartamento.getCodigoApartamento());
             }
         } else {
             JOptionPane.showMessageDialog(this, "Digite apenas número!", "Erro", JOptionPane.ERROR_MESSAGE);
-            LimparApartamento();
+            limparApartamento();
         }
     }//GEN-LAST:event_btnLocalizarCodApartamentoActionPerformed
 
     private void btnLocalizarCpfMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfMoradorActionPerformed
-        // TODO add your handling code here:
+
+        salvar = "Alterar";
         statusAlterarMorador(true);
+        String cpf = txtCpfMorador.getText();
+        morador = dadosCondominio.consultaCpfMorador(cpf);
+
+        if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+            if(morador != null) {
+                getMorador(morador);
+                statusAlterarMorador(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
+                        JOptionPane.ERROR_MESSAGE);
+                statusConsultarMorador(true);
+                limparMorador();
+            }
+        } else {
+            statusConsultarMorador(true);
+            limparMorador();
+            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
+                    JOptionPane.ERROR_MESSAGE);
+            
+        }
+//        if (!dadosCondominio.validaCpf(cpf).equals("Ok")) {
+//            if (morador == null) {
+//                JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
+//                        JOptionPane.ERROR_MESSAGE);
+//                statusInicioMorador(true);
+//                limparMorador();
+//            } else {
+//                getMorador();
+//                statusAlterarMorador(true);
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
+//                    JOptionPane.ERROR_MESSAGE);
+//            statusAlterarMorador(true);
+//            limparMorador();
+//        }
+
     }//GEN-LAST:event_btnLocalizarCpfMoradorActionPerformed
 
     private void btnLocalizarNomeMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarNomeMoradorActionPerformed
-        // TODO add your handling code here:
+
         statusAlterarMorador(true);
     }//GEN-LAST:event_btnLocalizarNomeMoradorActionPerformed
 
     private void btnIncluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitanteListaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnIncluirVisitanteListaActionPerformed
 
-    private void tabelaApartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaApartamentoMouseClicked
+    private void jTableApartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableApartamentoMouseClicked
+
         salvar = "Alterar";
         statusAlterarApartamento(true);
-        int posicao = tabelaApartamento.getSelectedRow();
-        apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(tabelaApartamento.getValueAt(posicao, 0).toString()));
-        pegarApartamento();
-    }//GEN-LAST:event_tabelaApartamentoMouseClicked
+        int posicao = jTableApartamento.getSelectedRow();
+        apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(jTableApartamento.getValueAt(posicao, 0).toString()));
+        getApartamento();
+    }//GEN-LAST:event_jTableApartamentoMouseClicked
 
     private void btnExcluirApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirApartamentoActionPerformed
-        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o apartamento " + 
-                txtNumeroApartamento.getText() + " do bloco " + txtBlocoApartamento.getText() +
-                " do banco de dados?", "Excluir Funcionário", 
+
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o apartamento "
+                + txtNumeroApartamento.getText() + " do bloco " + txtBlocoApartamento.getText()
+                + " do banco de dados?", "Excluir Funcionário",
                 JOptionPane.YES_NO_OPTION) == 0) {
             String codigo = txtCodApartamento.getText();
             dadosCondominio.excluiApartamento(codigo);
             exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
-            LimparApartamento();
+            limparApartamento();
         }
     }//GEN-LAST:event_btnExcluirApartamentoActionPerformed
+
+    private void jTableMoradorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMoradorMouseClicked
+        salvar = "Alterar";
+        statusAlterarMorador(true);
+        int posicao = jTableMorador.getSelectedRow();
+        morador = dadosCondominio.consultaCpfMorador(String.valueOf(jTableMorador.getValueAt(posicao, 0)));
+        getMorador(morador);    }//GEN-LAST:event_jTableMoradorMouseClicked
+
+    private void btnExcluirMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirMoradorActionPerformed
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o Morador "
+                + txtNomeMorador.getText() + " do banco de dados?", "Excluir Morador",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            String cpfMorador = txtCpfMorador.getText();
+            dadosCondominio.excluiMorador(cpfMorador);
+            exibeGridMorador(dadosCondominio.consultaGeralMorador());
+            limparMorador();
+        }
+    }//GEN-LAST:event_btnExcluirMoradorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1841,27 +2030,45 @@ public class Principal extends javax.swing.JFrame {
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+
+                if ("Nimbus".equals(info.getName())) {
+
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+
+                    break;
+
+                }
+
+            }
+
+        } catch (ClassNotFoundException ex) {
+
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        } catch (InstantiationException ex) {
+
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        } catch (IllegalAccessException ex) {
+
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        }
+
+        //</editor-fold>
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -1869,62 +2076,105 @@ public class Principal extends javax.swing.JFrame {
             }
         });
     }
-    
+
     //---------------Método do Funcionario---------------
-    
-    private void setarFuncionario(){        
-        
+    private void setFuncionario() {
+
         String ativo;
         if (radioSimFun.isSelected()) {
             ativo = "Sim";
-        }else if (radioNaoFun.isSelected()) {
+        } else if (radioNaoFun.isSelected()) {
             ativo = "Nao";
-        }else{
+        } else {
             ativo = "Vazio";
         }
         funcionario.setCpf(txtCpfFun.getText());
-        funcionario.setNome(txtNomeFun.getText());        
+        funcionario.setNome(txtNomeFun.getText());
         funcionario.setCargo(txtCargoFun.getText());
         funcionario.setTelefone(txtTelefoneFun.getText());
         funcionario.setEndereco(txtEnderecoFun.getText());
         funcionario.setAtivo(ativo);
         funcionario.setLogin(txtCpfFun.getText());
-        funcionario.setSenha(String.valueOf((txtSenhaFun.getPassword())));        
+        funcionario.setSenha(String.valueOf((txtSenhaFun.getPassword())));
     }
-    
-    private void pegarFuncionario(){
-        
+
+    private void getFuncionario() {
+
         txtCodFun.setText(String.valueOf(funcionario.getCod_Fun()));
         txtCpfFun.setText(funcionario.getCpf());
-        txtNomeFun.setText(funcionario.getNome());        
+        txtNomeFun.setText(funcionario.getNome());
         txtCargoFun.setText(funcionario.getCargo());
         txtTelefoneFun.setText(funcionario.getTelefone());
         txtEnderecoFun.setText(funcionario.getEndereco());
-        String ativo = funcionario.getAtivo();              
+        String ativo = funcionario.getAtivo();
         txtLoginFun.setText(funcionario.getLogin());
-        txtSenhaFun.setText(funcionario.getSenha());        
-        
+        txtSenhaFun.setText(funcionario.getSenha());
+
         if (ativo.equals("Sim")) {
             radioSimFun.setSelected(true);
-        }else if(ativo.equals("Nao")){
+        } else if (ativo.equals("Nao")) {
             radioNaoFun.setSelected(true);
         }
     }
+
     //---------------Método do Apartamento---------------
-    
-    private void setarApartamento(){
+    private void setApartamento() {
         apartamento.setNumeroApartamento(txtNumeroApartamento.getText());
         apartamento.setBlocoApartamento(txtBlocoApartamento.getText());
         apartamento.setVagaApartamento_1(txtEstacionamento1.getText());
         apartamento.setVagaApartamento_2(txtEstacionamento2.getName());
     }
-    
-    private void pegarApartamento(){
+
+    private void getApartamento() {
         txtCodApartamento.setText(String.valueOf(apartamento.getCodigoApartamento()));
         txtNumeroApartamento.setText(String.valueOf(apartamento.getNumeroApartamento()));
         txtBlocoApartamento.setText(apartamento.getBlocoApartamento());
         txtEstacionamento1.setText(apartamento.getVagaApartamento_1());
         txtEstacionamento2.setText(apartamento.getVagaApartamento_2());
+    }
+
+    //---------------Método do Morador---------------
+    private void setMorador() {
+        String ativo;
+
+        if (radioSimMorador.isSelected()) {
+            ativo = "Sim";
+        } else if (radioNaoMorador.isSelected()) {
+            ativo = "Nao";
+        } else {
+            ativo = "Vazio";
+        }
+
+        morador.setCpfMorador(txtCpfMorador.getText());
+        morador.setNomeMorador(txtNomeMorador.getText());
+        morador.setTelefoneMorador(txtTelefoneMorador.getText());
+        morador.setEmailMorador(txtEmailMorador.getText());
+        morador.setBlocoApartamentoMorador(txtBlocoApartamentoMorador.getText());
+        morador.setNumeroApartamentoMorador(txtNumeroApartamentoMorador.getText());
+        morador.setAtivoMorador(ativo);
+    }
+
+    private void getMorador(Morador morador) {
+        String ativo = morador.getAtivoMorador();
+
+        if (ativo.equals("Sim")) {
+            radioSimMorador.setSelected(true);
+        } else if (ativo.equals("Nao")) {
+            radioNaoMorador.setSelected(true);
+        }
+
+        Apartamento apart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoMorador());
+        
+        if(apart != null) {
+            txtBlocoApartamentoMorador.setText(apart.getBlocoApartamento());
+            txtNumeroApartamentoMorador.setText(apart.getNumeroApartamento());
+        }
+        
+        txtCpfMorador.setText(morador.getCpfMorador());
+        txtNomeMorador.setText(morador.getNomeMorador());
+        txtTelefoneMorador.setText(morador.getTelefoneMorador());
+        txtEmailMorador.setText(morador.getEmailMorador());
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2042,6 +2292,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTableApartamento;
+    private javax.swing.JTable jTableFuncionario;
+    private javax.swing.JTable jTableHistoricoVisita;
+    private javax.swing.JTable jTableMorador;
+    private javax.swing.JTable jTableVeiculo;
+    private javax.swing.JTable jTableVisitante;
     private javax.swing.JLabel lblCargo;
     private javax.swing.JLabel lblMsg;
     private javax.swing.JLabel lblNome_Fun;
@@ -2055,13 +2311,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioNaoMorador;
     private javax.swing.JRadioButton radioSimFun;
     private javax.swing.JRadioButton radioSimMorador;
-    private javax.swing.JTable tabelaApartamento;
-    private javax.swing.JTable tabelaFuncionario;
-    private javax.swing.JTable tabelaHistoricoVisita;
-    private javax.swing.JTable tabelaMorador;
     private javax.swing.JTable tabelaMoradorVisita;
-    private javax.swing.JTable tabelaVeiculo;
-    private javax.swing.JTable tabelaVisitante;
     private javax.swing.JTable tabelaVisitanteNaVisita;
     private javax.swing.JTextField txtBlocoApartamento;
     private javax.swing.JTextField txtBlocoApartamentoMorador;
@@ -2100,4 +2350,5 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelefoneMorador;
     private javax.swing.JTextField txtTelefoneMoradorVisita;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -138,7 +138,7 @@ public class Login extends javax.swing.JFrame {
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         // TODO add your handling code here:
         Principal principal = new Principal();
-        funcionarioAtual = dadosCondominio.consultaCpf(txtUsuario.getText());
+        funcionarioAtual = dadosCondominio.consultaCpfFuncionario(txtUsuario.getText());
         String login = txtUsuario.getText(), senha = new String(txtSenha.getPassword());
         
         
