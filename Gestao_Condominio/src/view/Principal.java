@@ -371,13 +371,12 @@ public class Principal extends javax.swing.JFrame {
         txtCpfVisitanteVisita.setEnabled(!status);
         txtNomeVisitanteVisita.setEnabled(!status);
         txtCpfMoradorVisita.setEnabled(!status);
-        txtTelefoneMoradorVisita.setEnabled(!status);
         txtNomeMoradorVisita.setEnabled(!status);
 
         btnIncluirVisita.setEnabled(status);
         btnIncluirVisitanteLista.setEnabled(!status);
-        btnExcluirVisitanteLista.setEnabled(!status);
         btnExcluirVisita.setEnabled(!status);
+        
     }
 
     //------------------- Veículo ------------------
@@ -472,24 +471,15 @@ public class Principal extends javax.swing.JFrame {
         txtBlocoApartamentoMorador = new javax.swing.JTextField();
         painelVisita = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaVisitanteNaVisita = new javax.swing.JTable();
         btnIncluirVisita = new javax.swing.JButton();
         jLabel65 = new javax.swing.JLabel();
         txtHoraVisita = new javax.swing.JTextField();
-        btnLocalizarNomeMoradorVisita = new javax.swing.JButton();
         btnLimparVisita = new javax.swing.JButton();
         btnExcluirVisita = new javax.swing.JButton();
-        btnExcluirVisitanteLista = new javax.swing.JButton();
-        jLabel66 = new javax.swing.JLabel();
-        txtTelefoneMoradorVisita = new javax.swing.JTextField();
         jLabel67 = new javax.swing.JLabel();
         txtDataVisita = new javax.swing.JTextField();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTableHistoricoVisita = new javax.swing.JTable();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        tabelaMoradorVisita = new javax.swing.JTable();
         jLabel69 = new javax.swing.JLabel();
         txtCpfMoradorVisita = new javax.swing.JTextField();
         jLabel70 = new javax.swing.JLabel();
@@ -497,10 +487,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jLabel71 = new javax.swing.JLabel();
         txtCpfVisitanteVisita = new javax.swing.JTextField();
-        btnLocalizarCpfVisitanteVisita = new javax.swing.JButton();
         jLabel72 = new javax.swing.JLabel();
         txtNomeMoradorVisita = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
         btnSalvarVisita = new javax.swing.JButton();
         btnLocalizarCpfMoradorVisita = new javax.swing.JButton();
         btnIncluirVisitanteLista = new javax.swing.JButton();
@@ -508,6 +496,7 @@ public class Principal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         painelVisitante = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -960,26 +949,6 @@ public class Principal extends javax.swing.JFrame {
         jLabel7.setText("Visita");
         painelVisita.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, -1));
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel18.setText("Lista de Visitante Incluído na Visita");
-        painelVisita.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, -1, -1));
-
-        tabelaVisitanteNaVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaVisitanteNaVisita.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "CPF do Visitante", "Nome do Visitante"
-            }
-        ));
-        jScrollPane1.setViewportView(tabelaVisitanteNaVisita);
-
-        painelVisita.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 240, 410, 100));
-
         btnIncluirVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIncluirVisita.setText("Incluir Nova Visita");
         btnIncluirVisita.addActionListener(new java.awt.event.ActionListener() {
@@ -991,14 +960,10 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel65.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel65.setText("Hora da Visita:");
-        painelVisita.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+        painelVisita.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         txtHoraVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtHoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 100, -1));
-
-        btnLocalizarNomeMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLocalizarNomeMoradorVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
-        painelVisita.add(btnLocalizarNomeMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 460, 20, 20));
+        painelVisita.add(txtHoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 100, -1));
 
         btnLimparVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLimparVisita.setText("Limpar Campos");
@@ -1012,22 +977,6 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluirVisita.setText("Excluir Visita");
         painelVisita.add(btnExcluirVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, -1, -1));
-
-        btnExcluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluirVisitanteLista.setText("Excluir Visitante da Lista");
-        btnExcluirVisitanteLista.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirVisitanteListaActionPerformed(evt);
-            }
-        });
-        painelVisita.add(btnExcluirVisitanteLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 180, -1));
-
-        jLabel66.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel66.setText("Telefone do morador:");
-        painelVisita.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 410, -1, -1));
-
-        txtTelefoneMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtTelefoneMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 410, 140, -1));
 
         jLabel67.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel67.setText("Data da Visita:");
@@ -1050,37 +999,21 @@ public class Principal extends javax.swing.JFrame {
         ));
         jScrollPane7.setViewportView(jTableHistoricoVisita);
 
-        painelVisita.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 880, 100));
-
-        tabelaMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tabelaMoradorVisita.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "CPF do Morador", "Nome do Morador"
-            }
-        ));
-        jScrollPane8.setViewportView(tabelaMoradorVisita);
-
-        painelVisita.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 390, 410, 90));
+        painelVisita.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 880, 130));
 
         jLabel69.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel69.setText("CPF do Visitante:");
-        painelVisita.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, -1));
+        painelVisita.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         txtCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 410, 130, -1));
+        painelVisita.add(txtCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 350, 300, -1));
 
         jLabel70.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel70.setText("Nome do Visitante:");
-        painelVisita.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+        painelVisita.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, -1, -1));
 
         txtNomeVisitanteVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtNomeVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 330, -1));
+        painelVisita.add(txtNomeVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 380, -1));
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel19.setText("Histórico das Visitas");
@@ -1088,25 +1021,17 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel71.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel71.setText("CPF do Morador a ser visitado:");
-        painelVisita.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, -1, -1));
+        painelVisita.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 350, -1, -1));
 
         txtCpfVisitanteVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtCpfVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 110, -1));
-
-        btnLocalizarCpfVisitanteVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLocalizarCpfVisitanteVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
-        painelVisita.add(btnLocalizarCpfVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 20, 20));
+        painelVisita.add(txtCpfVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, 190, -1));
 
         jLabel72.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel72.setText("Nome do Morador:");
-        painelVisita.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, -1));
+        painelVisita.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 410, -1, -1));
 
         txtNomeMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        painelVisita.add(txtNomeMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 460, 180, -1));
-
-        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel20.setText("Lista de Moradores");
-        painelVisita.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 370, -1, -1));
+        painelVisita.add(txtNomeMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 410, 370, -1));
 
         btnSalvarVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSalvarVisita.setText("Salvar");
@@ -1119,24 +1044,27 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
-        painelVisita.add(btnLocalizarCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 410, 20, 20));
+        painelVisita.add(btnLocalizarCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 350, 20, 20));
 
         btnIncluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIncluirVisitanteLista.setText("Incluir Visitante na Lista");
+        btnIncluirVisitanteLista.setText("Incluir Visitante");
         btnIncluirVisitanteLista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIncluirVisitanteListaActionPerformed(evt);
             }
         });
-        painelVisita.add(btnIncluirVisitanteLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 260, 180, -1));
-        painelVisita.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 1100, 10));
-        painelVisita.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 1100, 10));
+        painelVisita.add(btnIncluirVisitanteLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 350, 180, -1));
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        painelVisita.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 10, 220));
+        painelVisita.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 500, 10));
 
         jLabel3.setText("Informações do Morador");
-        painelVisita.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
+        painelVisita.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, -1, -1));
 
         jLabel4.setText("Informações do visitante");
-        painelVisita.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+        painelVisita.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
+        painelVisita.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 280, 510, 10));
 
         jTabbedPane1.addTab("Visita", painelVisita);
 
@@ -1322,6 +1250,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel78, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         txtEstacionamento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEstacionamento1.setText("A11");
         painelApartamento.add(txtEstacionamento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 130, -1));
 
         jLabel79.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1329,6 +1258,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, -1, -1));
 
         txtEstacionamento2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEstacionamento2.setText("A12");
         painelApartamento.add(txtEstacionamento2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 130, -1));
 
         jLabel89.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1346,13 +1276,13 @@ public class Principal extends javax.swing.JFrame {
         jTableVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTableVeiculo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Placa", "Fabricante", "Modelo", "Cor", "Bloco do Apartamento", "Número do Apartamento"
+                "Placa", "Fabricante", "Modelo", "Cor", "CPF do Morador"
             }
         ));
         jScrollPane5.setViewportView(jTableVeiculo);
@@ -1454,6 +1384,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 330, -1));
 
         txtBlocoApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtBlocoApartamentoVeiculo.setText("Não editavel");
         painelVeiculo.add(txtBlocoApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 130, -1));
 
         jLabel87.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1461,6 +1392,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, -1, -1));
 
         txtNumeroApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNumeroApartamentoVeiculo.setText("Não editavel");
         painelVeiculo.add(txtNumeroApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, 130, -1));
 
         jLabel88.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1740,11 +1672,6 @@ public class Principal extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparVisitaActionPerformed
-
-    private void btnExcluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitanteListaActionPerformed
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExcluirVisitanteListaActionPerformed
 
     private void btnSalvarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitaActionPerformed
 
@@ -2203,7 +2130,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluirVeiculo;
     private javax.swing.JButton btnExcluirVisita;
     private javax.swing.JButton btnExcluirVisitante;
-    private javax.swing.JButton btnExcluirVisitanteLista;
     private javax.swing.JButton btnIncluirApartamento;
     private javax.swing.JButton btnIncluirFun;
     private javax.swing.JButton btnIncluirMorador;
@@ -2223,9 +2149,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnLocalizarCpfMoradorVeiculo;
     private javax.swing.JButton btnLocalizarCpfMoradorVisita;
     private javax.swing.JButton btnLocalizarCpfVisitante;
-    private javax.swing.JButton btnLocalizarCpfVisitanteVisita;
     private javax.swing.JButton btnLocalizarNomeMorador;
-    private javax.swing.JButton btnLocalizarNomeMoradorVisita;
     private javax.swing.JButton btnLocalizarNomeVisitante;
     private javax.swing.JButton btnLocalizarPlacaVeiculo;
     private javax.swing.JButton btnLogout;
@@ -2242,10 +2166,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
@@ -2269,7 +2191,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
@@ -2299,16 +2220,15 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableApartamento;
     private javax.swing.JTable jTableFuncionario;
@@ -2329,8 +2249,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioNaoMorador;
     private javax.swing.JRadioButton radioSimFun;
     private javax.swing.JRadioButton radioSimMorador;
-    private javax.swing.JTable tabelaMoradorVisita;
-    private javax.swing.JTable tabelaVisitanteNaVisita;
     private javax.swing.JTextField txtBlocoApartamento;
     private javax.swing.JTextField txtBlocoApartamentoMorador;
     private javax.swing.JTextField txtBlocoApartamentoVeiculo;
@@ -2366,7 +2284,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenhaFun;
     private javax.swing.JTextField txtTelefoneFun;
     private javax.swing.JTextField txtTelefoneMorador;
-    private javax.swing.JTextField txtTelefoneMoradorVisita;
     // End of variables declaration//GEN-END:variables
 
 }
