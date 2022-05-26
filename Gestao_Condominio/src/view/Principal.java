@@ -10,9 +10,18 @@ import classe.DadosCondominio;
 import classe.Funcionario;
 import classe.Apartamento;
 import classe.Morador;
+import classe.Visita;
+import classe.Visitante;
+import classe.Veiculo;
 import view.Login;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,29 +29,46 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ayrton Hasegawa
  */
-
 public class Principal extends javax.swing.JFrame {
 
     DadosCondominio dadosCondominio = new DadosCondominio();
-    String salvar, user;
+    String salvar, user, cpfAntigo;
 
-    ResultSet rsCondominio = dadosCondominio.consultaGeralFuncionario();
+    ResultSet rsCondominioFuncionario = dadosCondominio.consultaGeralFuncionario();
     ResultSet rsCondominioApartamento = dadosCondominio.consultaGeralApartamento();
     ResultSet rsCondominioMorador = dadosCondominio.consultaGeralMorador();
+    ResultSet rsCondominioVisita = dadosCondominio.consultaGeralVisita();
+    ResultSet rsCondominioVisitante = dadosCondominio.consultaGeralVisitante();
+    ResultSet rsCondominioVeiculo = dadosCondominio.consultaGeralVeiculo();
 
     Login login = new Login();
     Funcionario funcionario = new Funcionario();
     Apartamento apartamento = new Apartamento();
     Morador morador = new Morador();
+    Visita visita = new Visita();
+    Visitante visitante = new Visitante();
+    Veiculo veiculo = new Veiculo();
 
     public Principal() {
         initComponents();
         lblMsg.setText(dadosCondominio.getCon());
         //lblNome_Fun.setText(login.chama());
-        exibeGridFuncionario(rsCondominio);
-        exibeGridApartamento(rsCondominioApartamento);
-        exibeGridMorador(rsCondominioMorador);
+        exibeGridGeral();
         statusInicio();
+        txtDataVisita.setText(getData("data"));
+        txtHoraVisita.setText(getData("hora"));
+    }
+
+    private String getData(String data) {
+        Date dataHora = new java.util.Date();
+        String pegaData = new SimpleDateFormat("dd/MM/yyyy").format(dataHora);
+        String pegaHora = new SimpleDateFormat("HH:mm").format(dataHora);
+
+        if (data.equals("data")) {
+            return pegaData;
+        } else {
+            return pegaHora;
+        }
     }
 
     private void statusInicio() {
@@ -51,6 +77,7 @@ public class Principal extends javax.swing.JFrame {
         statusInicioMorador(true);
         statusInicioVisita(true);
         statusInicioVeiculo(true);
+        txtDataVisita.setText(user);
     }
 
     //------------------------Funcionário----------------------------
@@ -272,7 +299,6 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(!status);
         btnLocalizarCpfMorador.setEnabled(!status);
-        btnLocalizarNomeMorador.setEnabled(!status);
 
         radioSimMorador.setEnabled(!status);
         radioNaoMorador.setEnabled(!status);
@@ -290,7 +316,6 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(!status);
         btnLocalizarCpfMorador.setEnabled(status);
-        btnLocalizarNomeMorador.setEnabled(status);
         radioSimMorador.setEnabled(!status);
         radioNaoMorador.setEnabled(!status);
     }
@@ -307,7 +332,6 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirMorador.setEnabled(status);
         btnSalvarMorador.setEnabled(status);
         btnLocalizarCpfMorador.setEnabled(!status);
-        btnLocalizarNomeMorador.setEnabled(!status);
         radioSimMorador.setEnabled(status);
         radioNaoMorador.setEnabled(status);
     }
@@ -324,7 +348,6 @@ public class Principal extends javax.swing.JFrame {
         btnExcluirMorador.setEnabled(!status);
         btnSalvarMorador.setEnabled(status);
         btnLocalizarCpfMorador.setEnabled(!status);
-        btnLocalizarNomeMorador.setEnabled(!status);
         radioSimMorador.setEnabled(status);
         radioNaoMorador.setEnabled(status);
     }
@@ -376,7 +399,115 @@ public class Principal extends javax.swing.JFrame {
         btnIncluirVisita.setEnabled(status);
         btnIncluirVisitanteLista.setEnabled(!status);
         btnExcluirVisita.setEnabled(!status);
-        
+        btnLocalizarCpfMoradorVisita.setEnabled(!status);
+        btnSalvarVisita.setEnabled(!status);
+    }
+
+    private void statusConsultarVisita(boolean status) {
+        txtDataVisita.setEnabled(!status);
+        txtHoraVisita.setEnabled(!status);
+        txtCpfVisitanteVisita.setEnabled(status);
+        txtNomeVisitanteVisita.setEnabled(!status);
+        txtCpfMoradorVisita.setEnabled(status);
+        txtNomeMoradorVisita.setEnabled(!status);
+
+        btnIncluirVisita.setEnabled(status);
+        btnIncluirVisitanteLista.setEnabled(status);
+        btnExcluirVisita.setEnabled(!status);
+        btnLocalizarCpfMoradorVisita.setEnabled(status);
+        btnSalvarVisita.setEnabled(status);
+    }
+
+    private void statusAlterarVisita(boolean status) {
+        txtDataVisita.setEnabled(!status);
+        txtHoraVisita.setEnabled(!status);
+        txtCpfVisitanteVisita.setEnabled(status);
+        txtNomeVisitanteVisita.setEnabled(!status);
+        txtCpfMoradorVisita.setEnabled(status);
+        txtNomeMoradorVisita.setEnabled(!status);
+
+        btnIncluirVisita.setEnabled(status);
+        btnIncluirVisitanteLista.setEnabled(status);
+        btnExcluirVisita.setEnabled(status);
+        btnLocalizarCpfMoradorVisita.setEnabled(status);
+        btnSalvarVisita.setEnabled(status);
+    }
+
+    private void statusIncluirVisita(boolean status) {
+        txtDataVisita.setEnabled(!status);
+        txtHoraVisita.setEnabled(!status);
+        txtCpfVisitanteVisita.setEnabled(status);
+        txtNomeVisitanteVisita.setEnabled(!status);
+        txtCpfMoradorVisita.setEnabled(status);
+        txtNomeMoradorVisita.setEnabled(!status);
+
+        btnIncluirVisita.setEnabled(status);
+        btnIncluirVisitanteLista.setEnabled(status);
+        btnExcluirVisita.setEnabled(!status);
+        btnLocalizarCpfMoradorVisita.setEnabled(status);
+        btnSalvarVisita.setEnabled(status);
+    }
+
+    private void exibeGridVisita(ResultSet rs) {
+        DefaultTableModel tabelaVisita = new DefaultTableModel(null, new String[]{
+            "Código da Visita", "Data", "Hora", "CPF do Morador", "CPF do Visitante Responsável"});
+
+        try {
+            rs.first();
+            while (!rs.isAfterLast()) {
+                Morador recebeMorador = dadosCondominio.consultaCpfMorador(rs.getString("Vs_CPF_Morador"));
+                Visitante recebeVisitante = dadosCondominio.consultaCpfVisitante(rs.getString("Vs_CPF_Visitante"));
+                String[] dados = new String[5];
+                dados[0] = rs.getString("Vs_Cod_Visita");
+                dados[1] = rs.getString("Vs_Data");
+                dados[2] = rs.getString("Vs_Hora_Entrada");
+                dados[3] = recebeMorador.getCpfMorador();
+                dados[4] = recebeVisitante.getCpfVisitante();
+
+                tabelaVisita.addRow(dados);
+                rs.next();
+            }
+        } catch (Exception e) {
+        }
+        jTableHistoricoVisita.setModel(tabelaVisita);
+    }
+
+    private void limparVisita() {
+        txtDataVisita.setText("");
+        txtHoraVisita.setText("");
+        txtCpfVisitanteVisita.setText("");
+        txtNomeVisitanteVisita.setText("");
+        txtCpfMoradorVisita.setText("");
+        txtNomeMoradorVisita.setText("");
+    }
+
+    //------------------- Visitante ------------------
+    private void statusInicioVisitante(boolean status) {
+        txtNomeVisitante.setEnabled(!status);
+    }
+
+    private void exibeGridVisitante(ResultSet rs) {
+        DefaultTableModel tabelaVisitante = new DefaultTableModel(null, new String[]{
+            "CPF do Visitante", "Nome do Visitante"});
+
+        try {
+            rs.first();
+            while (!rs.isAfterLast()) {
+                String[] dados = new String[2];
+                dados[0] = rs.getString("Vst_CPF");
+                dados[1] = rs.getString("Vst_Nome");
+
+                tabelaVisitante.addRow(dados);
+                rs.next();
+            }
+        } catch (Exception e) {
+        }
+        jTableVisitante.setModel(tabelaVisitante);
+    }
+
+    private void limparVisitante() {
+        txtCpfVisitante.setText("");
+        txtNomeVisitante.setText("");
     }
 
     //------------------- Veículo ------------------
@@ -391,8 +522,98 @@ public class Principal extends javax.swing.JFrame {
         txtNumeroApartamentoVeiculo.setEnabled(!status);
 
         btnConsultarVeiculo.setEnabled(status);
-        btnIncluirVeiculo.setEnabled(!status);
+        btnIncluirVeiculo.setEnabled(status);
         btnExcluirVeiculo.setEnabled(!status);
+        btnLocalizarPlacaVeiculo.setEnabled(!status);
+        btnLocalizarCpfMoradorVeiculo.setEnabled(!status);
+        btnSalvarVeiculo.setEnabled(!status);
+    }
+
+    private void statusConsultarVeiculo(boolean status) {
+        txtPlacaVeiculo.setEnabled(status);
+        txtModeloVeiculo.setEnabled(status);
+        txtCorVeiculo.setEnabled(status);
+        txtFabricanteVeiculo.setEnabled(status);
+        txtCpfMoradorVeiculo.setEnabled(status);
+        txtNomeMoradorVeiculo.setEnabled(!status);
+        txtBlocoApartamentoVeiculo.setEnabled(!status);
+        txtNumeroApartamentoVeiculo.setEnabled(!status);
+
+        btnConsultarVeiculo.setEnabled(status);
+        btnIncluirVeiculo.setEnabled(status);
+        btnExcluirVeiculo.setEnabled(status);
+        btnLocalizarPlacaVeiculo.setEnabled(status);
+        btnLocalizarCpfMoradorVeiculo.setEnabled(status);
+        btnSalvarVeiculo.setEnabled(status);
+    }
+
+    private void statusIncluirVeiculo(boolean status) {
+        txtPlacaVeiculo.setEnabled(status);
+        txtModeloVeiculo.setEnabled(status);
+        txtCorVeiculo.setEnabled(status);
+        txtFabricanteVeiculo.setEnabled(status);
+        txtCpfMoradorVeiculo.setEnabled(status);
+        txtNomeMoradorVeiculo.setEnabled(!status);
+        txtBlocoApartamentoVeiculo.setEnabled(!status);
+        txtNumeroApartamentoVeiculo.setEnabled(!status);
+
+        btnConsultarVeiculo.setEnabled(status);
+        btnIncluirVeiculo.setEnabled(status);
+        btnExcluirVeiculo.setEnabled(!status);
+        btnLocalizarPlacaVeiculo.setEnabled(!status);
+        btnLocalizarCpfMoradorVeiculo.setEnabled(status);
+        btnSalvarVeiculo.setEnabled(status);
+    }
+
+    private void statusAlterarVeiculo(boolean status) {
+        txtPlacaVeiculo.setEnabled(status);
+        txtModeloVeiculo.setEnabled(status);
+        txtCorVeiculo.setEnabled(status);
+        txtFabricanteVeiculo.setEnabled(status);
+        txtCpfMoradorVeiculo.setEnabled(status);
+        txtNomeMoradorVeiculo.setEnabled(!status);
+        txtBlocoApartamentoVeiculo.setEnabled(!status);
+        txtNumeroApartamentoVeiculo.setEnabled(!status);
+
+        btnConsultarVeiculo.setEnabled(status);
+        btnIncluirVeiculo.setEnabled(status);
+        btnExcluirVeiculo.setEnabled(status);
+        btnLocalizarPlacaVeiculo.setEnabled(!status);
+        btnLocalizarCpfMoradorVeiculo.setEnabled(status);
+        btnSalvarVeiculo.setEnabled(status);
+    }
+
+    private void limparVeiculo() {
+        txtPlacaVeiculo.setText("");
+        txtModeloVeiculo.setText("");
+        txtCorVeiculo.setText("");
+        txtFabricanteVeiculo.setText("");
+        txtCpfMoradorVeiculo.setText("");
+        txtNomeMoradorVeiculo.setText("");
+        txtBlocoApartamentoVeiculo.setText("");
+        txtNumeroApartamentoVeiculo.setText("");
+    }
+
+    private void exibeGridVeiculo(ResultSet rs) {
+        DefaultTableModel tabelaVeiculo = new DefaultTableModel(null, new String[]{
+            "Placa do Veículo", "Modelo", "Fabricante", "Cor", "CPF do Propeietário"});
+
+        try {
+            rs.first();
+            while (!rs.isAfterLast()) {
+                String[] dados = new String[6];
+                dados[0] = rs.getString("Vei_Placa");
+                dados[1] = rs.getString("Vei_Modelo");
+                dados[2] = rs.getString("Vei_Fabricante");
+                dados[3] = rs.getString("Vei_Cor");
+                dados[4] = rs.getString("Vei_CPF_Morador");
+
+                tabelaVeiculo.addRow(dados);
+                rs.next();
+            }
+        } catch (Exception e) {
+        }
+        jTableVeiculo.setModel(tabelaVeiculo);
     }
 
     @SuppressWarnings("unchecked")
@@ -453,7 +674,6 @@ public class Principal extends javax.swing.JFrame {
         btnSalvarMorador = new javax.swing.JButton();
         jLabel48 = new javax.swing.JLabel();
         txtNomeMorador = new javax.swing.JTextField();
-        btnLocalizarNomeMorador = new javax.swing.JButton();
         jLabel54 = new javax.swing.JLabel();
         txtEmailMorador = new javax.swing.JTextField();
         btnLocalizarCpfMorador = new javax.swing.JButton();
@@ -568,9 +788,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Gestão de Condomínio");
-        setMaximumSize(new java.awt.Dimension(1366, 768));
         setMinimumSize(new java.awt.Dimension(1366, 690));
-        setPreferredSize(new java.awt.Dimension(1366, 768));
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -620,6 +838,11 @@ public class Principal extends javax.swing.JFrame {
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(919, 500));
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         painelFuncionario.setMaximumSize(new java.awt.Dimension(760, 768));
         painelFuncionario.setMinimumSize(new java.awt.Dimension(500, 400));
@@ -810,7 +1033,7 @@ public class Principal extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Cpf do morador", "Nome do morador", "Telefone do morador", "Email do morador", "Código do Apartamento", "Bloco do Prédio", "Número do Apartamento"
+                "Cpf do morador", "Nome do morador", "Email do morador", "Telefone do morador", "Mora no Apartamento", "Bloco do Prédio", "Número do Apartamento"
             }
         ));
         jTableMorador.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -864,15 +1087,6 @@ public class Principal extends javax.swing.JFrame {
 
         txtNomeMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         painelMorador.add(txtNomeMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, 330, -1));
-
-        btnLocalizarNomeMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLocalizarNomeMorador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
-        btnLocalizarNomeMorador.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLocalizarNomeMoradorActionPerformed(evt);
-            }
-        });
-        painelMorador.add(btnLocalizarNomeMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 130, 20, 20));
 
         jLabel54.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel54.setText("E-mail:");
@@ -976,6 +1190,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnExcluirVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluirVisita.setText("Excluir Visita");
+        btnExcluirVisita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirVisitaActionPerformed(evt);
+            }
+        });
         painelVisita.add(btnExcluirVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, -1, -1));
 
         jLabel67.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -997,6 +1216,11 @@ public class Principal extends javax.swing.JFrame {
                 "Cód. da Visita", "Data da Visita", "Hora da Visita", "CPF Morador", "CPF Visitante"
             }
         ));
+        jTableHistoricoVisita.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableHistoricoVisitaMouseClicked(evt);
+            }
+        });
         jScrollPane7.setViewportView(jTableHistoricoVisita);
 
         painelVisita.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 880, 130));
@@ -1044,6 +1268,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfMoradorVisita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocalizarCpfMoradorVisitaActionPerformed(evt);
+            }
+        });
         painelVisita.add(btnLocalizarCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 350, 20, 20));
 
         btnIncluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1093,6 +1322,11 @@ public class Principal extends javax.swing.JFrame {
                 "Cpf", "Nome"
             }
         ));
+        jTableVisitante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVisitanteMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(jTableVisitante);
 
         painelVisitante.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 1100, 260));
@@ -1108,6 +1342,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnExcluirVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluirVisitante.setText("Excluir Visitante");
+        btnExcluirVisitante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirVisitanteActionPerformed(evt);
+            }
+        });
         painelVisitante.add(btnExcluirVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 480, -1, -1));
 
         btnSalvarVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1128,6 +1367,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfVisitante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfVisitante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocalizarCpfVisitanteActionPerformed(evt);
+            }
+        });
         painelVisitante.add(btnLocalizarCpfVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, 20, 20));
 
         jLabel74.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1250,7 +1494,6 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel78, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         txtEstacionamento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtEstacionamento1.setText("A11");
         painelApartamento.add(txtEstacionamento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 130, -1));
 
         jLabel79.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1258,7 +1501,6 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, -1, -1));
 
         txtEstacionamento2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtEstacionamento2.setText("A12");
         painelApartamento.add(txtEstacionamento2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 130, -1));
 
         jLabel89.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1285,6 +1527,11 @@ public class Principal extends javax.swing.JFrame {
                 "Placa", "Fabricante", "Modelo", "Cor", "CPF do Morador"
             }
         ));
+        jTableVeiculo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVeiculoMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(jTableVeiculo);
 
         painelVeiculo.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 1110, 150));
@@ -1316,6 +1563,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarPlacaVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarPlacaVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarPlacaVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocalizarPlacaVeiculoActionPerformed(evt);
+            }
+        });
         painelVeiculo.add(btnLocalizarPlacaVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 20, 20));
 
         btnLimparVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1329,6 +1581,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnExcluirVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExcluirVeiculo.setText("Excluir Veículo");
+        btnExcluirVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirVeiculoActionPerformed(evt);
+            }
+        });
         painelVeiculo.add(btnExcluirVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 270, -1, -1));
 
         btnSalvarVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1384,7 +1641,6 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 330, -1));
 
         txtBlocoApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBlocoApartamentoVeiculo.setText("Não editavel");
         painelVeiculo.add(txtBlocoApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 130, -1));
 
         jLabel87.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1392,7 +1648,6 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, -1, -1));
 
         txtNumeroApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtNumeroApartamentoVeiculo.setText("Não editavel");
         painelVeiculo.add(txtNumeroApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, 130, -1));
 
         jLabel88.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1401,6 +1656,11 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfMoradorVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocalizarCpfMoradorVeiculoActionPerformed(evt);
+            }
+        });
         painelVeiculo.add(btnLocalizarCpfMoradorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 20, 20));
 
         jLabel90.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1530,7 +1790,8 @@ public class Principal extends javax.swing.JFrame {
             } else if (salvar.equals("Alterar")) {
                 setFuncionario();
                 funcionario.setCod_Fun(Integer.parseInt(txtCodFun.getText()));
-                int codFun = funcionario.getCod_Fun(), codFunE = funcionarioExistente.getCod_Fun();
+                int codFun = funcionario.getCod_Fun();
+                //int codFunE = funcionarioExistente.getCod_Fun();
 
                 //-----------------Verifica CPF--------------                
                 if (funcionarioExistente == null || funcionarioExistente.getCod_Fun()
@@ -1600,92 +1861,167 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnSalvarMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarMoradorActionPerformed
 
-        setMorador();
+        String numeroApartamento = txtNumeroApartamentoMorador.getText();
         String msg;
-        boolean statusCampoVazio = morador.verificaCampoVazio(morador);
-        String cpfValido = dadosCondominio.validaCpf(morador.getCpfMorador());
-        String verificaNumeroCpf = dadosCondominio.validaNumero(morador.getCpfMorador(), 20);
-        Apartamento existeApartamento = dadosCondominio.verificaExisteApartamento(
-                morador.getBlocoApartamentoMorador(), Integer.parseInt(morador.getNumeroApartamentoMorador()));
 
-        if (existeApartamento != null) {
-            int codigoApartamento = existeApartamento.getCodigoApartamento();
+        if (!numeroApartamento.equals("")) {
+            setMorador();
 
-            if (statusCampoVazio != false) {
-                if (verificaNumeroCpf.equals("Numero")) {
-                    if (cpfValido.equals("Ok")) {
-                        if (dadosCondominio.validaNome(morador.getNomeMorador()) == true) {
+            if (morador.verificaCampoVazio(morador)) {
+                setMorador();
+                String cpfValido = dadosCondominio.validaCpf(morador.getCpfMorador());
+                String verificaNumeroCpf = dadosCondominio.validaNumero(morador.getCpfMorador(), 20);
+                Apartamento existeApartamento = dadosCondominio.verificaExisteApartamento(morador.getBlocoApartamentoMorador(), Integer.parseInt(morador.getNumeroApartamentoMorador()));
 
-//--------------------------Inserir Morador------------------------
-                            if (salvar.equals("Incluir")) {
-                                if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Morador?",
-                                        "Incluir Morador", JOptionPane.YES_NO_OPTION) == 0) {
-                                    msg = dadosCondominio.insereMorador(morador, codigoApartamento);
-                                    JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
-                                    limparMorador();
-                                    statusInicioMorador(true);
-                                    exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                if (existeApartamento != null) {
+                    if (verificaNumeroCpf.equals("Numero")) {
+                        if (cpfValido.equals("Ok")) {
+                            if (dadosCondominio.validaNome(morador.getNomeMorador())) {
+
+                                //--------------------------Inserir Morador------------------------
+                                if (salvar.equals("Incluir")) {
+                                    if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Morador?",
+                                            "Incluir Morador", JOptionPane.YES_NO_OPTION) == 0) {
+                                        msg = dadosCondominio.insereMorador(morador, existeApartamento.getCodigoApartamento());
+                                        JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
+                                        limparMorador();
+                                        statusInicioMorador(true);
+                                        exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                    }
+
+                                    //--------------------------Alterar Morador------------------------
+                                } else if (salvar.equals("Alterar")) {
+                                    if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Morador?",
+                                            "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                        
+                                        System.out.println("cpfAntigo ----> " + cpfAntigo);
+                                        setMorador(existeApartamento.getCodigoApartamento());
+                                        System.out.println("cpf novo ----> " + morador.getCpfMorador());
+                                        System.out.println("setMorador getCpfMorador ----> " + morador.getCpfMorador());
+                                        System.out.println("setMorador getNomeMorador ----> " + morador.getNomeMorador());
+                                        System.out.println("setMorador getEmailMorador ----> " + morador.getEmailMorador());
+                                        System.out.println("setMorador getTelefoneMorador ----> " + morador.getTelefoneMorador());
+                                        System.out.println("setMorador getAtivoMorador ----> " + morador.getAtivoMorador());
+                                        System.out.println("setMorador getCodigoApartamento----> " + morador.getCodigoApartamento());
+                                        System.out.println("existeApartamento.getCodigoApartamento()----> " + existeApartamento.getCodigoApartamento());
+                                        msg = dadosCondominio.alteraMorador(morador, cpfAntigo);
+                                        JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                        limparMorador();
+                                        statusInicioMorador(true);
+                                        exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                    }
                                 }
-
-//--------------------------Alterar Morador------------------------
-                            } else if (salvar.equals("Alterar")) {
-                                if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Morador?",
-                                        "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
-                                    setMorador();
-                                    msg = dadosCondominio.alteraMorador(morador, codigoApartamento);
-                                    JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
-
-                                    limparMorador();
-                                    statusInicioMorador(true);
-                                    exibeGridMorador(dadosCondominio.consultaGeralMorador());
-                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
+                                        "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
                             }
                         } else {
-                            JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
-                                    "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, cpfValido,
+                                    "CPF Incorreto", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, cpfValido,
-                                "CPF Incorreto", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Digite apenas numeros, sem ponto.",
+                                "CPF Inválido", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Digite apenas numeros, sem ponto.",
-                            "CPF Inválido", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Apartamento " + morador.getNumeroApartamentoMorador()
+                            + ", Bloco " + morador.getBlocoApartamentoMorador() + " não existe.",
+                            "Apartamento não cadastrado", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
-                        "Campo vazio", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Apartamento " + morador.getNumeroApartamentoMorador() +
-                    ", Bloco " + morador.getBlocoApartamentoMorador() + " não existe.",
-                    "Apartamento não cadastrado", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSalvarMoradorActionPerformed
 
     private void btnIncluirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitaActionPerformed
 
-        // TODO add your handling code here:
+        salvar = "Incluir";
+        limparVisita();
+        statusIncluirVisita(true);
+        txtDataVisita.setText(getData("data"));
+        txtHoraVisita.setText(getData("hora"));
     }//GEN-LAST:event_btnIncluirVisitaActionPerformed
 
     private void btnLimparVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVisitaActionPerformed
 
-        // TODO add your handling code here:
+        limparVisita();
+        statusInicioVisita(true);
+        txtDataVisita.setText(getData("data"));
+        txtHoraVisita.setText(getData("hora"));
     }//GEN-LAST:event_btnLimparVisitaActionPerformed
 
     private void btnSalvarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitaActionPerformed
 
-        // TODO add your handling code here:
+        setVisita();
+        String msg;
+        
+        if(!txtCpfVisitanteVisita.getText().equals("") || !txtNomeVisitanteVisita.getText().equals("") || 
+                !txtCpfMoradorVisita.getText().equals("") || !txtNomeMoradorVisita.getText().equals("")) {
+            
+//--------------------------Inserir Visita------------------------             
+            if(salvar.equals("Incluir")) {
+                if (JOptionPane.showConfirmDialog(this, "Deseja incluir os dados da Visita?",
+                        "Incluir Visita", JOptionPane.YES_NO_OPTION) == 0) {
+                    msg = dadosCondominio.insereVisita(visita);
+                    JOptionPane.showMessageDialog(this, msg, "Incluir Visita no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
+                    limparVisita();
+                    statusInicioVisita(true);
+                    exibeGridVisita(dadosCondominio.consultaGeralVisita());
+                }
+                
+//--------------------------Alterar Visita------------------------                
+            } else if(salvar.equals("Alterar")) {
+                setVisita();
+                if (JOptionPane.showConfirmDialog(this, "Deseja Alterar os dados da Visita?",
+                        "Alterar Visita", JOptionPane.YES_NO_OPTION) == 0) {
+                    msg = dadosCondominio.alteraVisita(visita);
+                    JOptionPane.showMessageDialog(this, msg, "Alterar Visita no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
+                    limparVisita();
+                    statusInicioVisita(true);
+                    exibeGridVisita(dadosCondominio.consultaGeralVisita());
+                }
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
+                    "Campo vazio", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSalvarVisitaActionPerformed
 
     private void btnLimparVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVisitanteActionPerformed
 
-        // TODO add your handling code here:
+        limparVisitante();
+        exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
     }//GEN-LAST:event_btnLimparVisitanteActionPerformed
 
     private void btnSalvarVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVisitanteActionPerformed
 
-        // TODO add your handling code here:
+        setVisitante();
+        String msg;
+        System.out.println("cpfAntigo ----> " + cpfAntigo);
+        String cpf = txtCpfVisitante.getText();
+        String statusCampoVazio = visitante.verificaCampoVazio(visitante);
+
+        if (statusCampoVazio.equals("Ok")) {
+            if (dadosCondominio.validaNumero(visitante.getCpfVisitante(), 20) == "Numero") {
+                if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Visitante?",
+                        "Alterar Visitante", JOptionPane.YES_NO_OPTION) == 0) {
+                    setVisitante();
+                    System.out.println("visitante.getCpfVisitante() ----> " + visitante.getCpfVisitante());
+                    msg = dadosCondominio.alteraVisitante(visitante, cpfAntigo);
+                    JOptionPane.showMessageDialog(this, msg, "Alterar Visitante no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
+                    limparVisitante();
+                    exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
+                        "Campo vazio", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnSalvarVisitanteActionPerformed
 
     private void btnConsultarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarApartamentoActionPerformed
@@ -1710,31 +2046,33 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnSalvarApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarApartamentoActionPerformed
 
-        setApartamento();
-        String msg, bloco = apartamento.getBlocoApartamento();
-        int numAp = Integer.parseInt(apartamento.getNumeroApartamento());
-        boolean status = apartamento.verificaCampoVazioApartamento(apartamento);
+        String numeroApartamento = txtNumeroApartamento.getText();
 
-        if (status == false) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (apartamento.validaNumeroApartamento(apartamento) == true) {
-                if (dadosCondominio.verificaExisteApartamento(bloco, numAp) == null) {
+        if (!numeroApartamento.equals("")) {
+            setApartamento();
+            String msg, bloco = apartamento.getBlocoApartamento();
+            int numAp = Integer.parseInt(apartamento.getNumeroApartamento());
+            boolean status = apartamento.verificaCampoVazioApartamento(apartamento);
 
-//--------------------------Incluir Apartamento------------------------                    
+            if (status != false) {
+                if (apartamento.validaNumeroApartamento(apartamento) == true) {
+//--------------------------Incluir Apartamento------------------------                
                     if (salvar.equals("Incluir")) {
-                        setApartamento();
-                        if (JOptionPane.showConfirmDialog(this, "Deseja Incluir o Apartamento?",
-                                "Incluir Apartamento", JOptionPane.YES_NO_OPTION) == 0) {
-                            msg = dadosCondominio.insereApartamento(apartamento);
-                            JOptionPane.showMessageDialog(this, msg, "Incluir Apartamento", JOptionPane.INFORMATION_MESSAGE);
-                            limparApartamento();
-                            statusInicioApartamento(true);
-                            exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                        if (dadosCondominio.verificaExisteApartamento(bloco, numAp) == null) {
+                            setApartamento();
+                            if (JOptionPane.showConfirmDialog(this, "Deseja Incluir o Apartamento?",
+                                    "Incluir Apartamento", JOptionPane.YES_NO_OPTION) == 0) {
+                                msg = dadosCondominio.insereApartamento(apartamento);
+                                JOptionPane.showMessageDialog(this, msg, "Incluir Apartamento", JOptionPane.INFORMATION_MESSAGE);
+                                limparApartamento();
+                                statusInicioApartamento(true);
+                                exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Digite outro número para o bloco do apartamento",
+                                    "Apartamento já cadastrado!", JOptionPane.ERROR_MESSAGE);
                         }
-
-//--------------------------Alterar Apartamento------------------------                         
+//--------------------------Alterar Apartamento------------------------                    
                     } else if (salvar.equals("Alterar")) {
                         setApartamento();
                         apartamento.setCodigoAparatamento(Integer.parseInt(txtCodApartamento.getText()));
@@ -1752,34 +2090,106 @@ public class Principal extends javax.swing.JFrame {
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Digite outro número para o bloco do apartamento",
-                            "Apartamento já cadastrado!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Digite apenas números maior que zero no campo do número do apartamento", "Número invalido!", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Digite apenas números maior que zero no campo do número do apartamento",
-                        "Número invalido!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Campo vazio", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSalvarApartamentoActionPerformed
 
     private void btnConsultarVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarVeiculoActionPerformed
 
-        // TODO add your handling code here:
+        statusConsultarVeiculo(true);
+        salvar = "Alterar";
+        limparVeiculo();
     }//GEN-LAST:event_btnConsultarVeiculoActionPerformed
 
     private void btnIncluirVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVeiculoActionPerformed
 
-        // TODO add your handling code here:
+        statusIncluirVeiculo(true);
+        salvar = "Incluir";
+        limparVeiculo();
     }//GEN-LAST:event_btnIncluirVeiculoActionPerformed
 
     private void btnLimparVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVeiculoActionPerformed
 
-        // TODO add your handling code here:
+        limparVeiculo();
+        statusInicioVeiculo(true);
     }//GEN-LAST:event_btnLimparVeiculoActionPerformed
 
     private void btnSalvarVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarVeiculoActionPerformed
 
-        // TODO add your handling code here:
+        String numeroApartamento = txtNumeroApartamentoVeiculo.getText();
+        String msg;
+        
+        if(!numeroApartamento.equals("")) {
+            setVeiculo();
+            if(veiculo.verificaCampoVazioVeiculo(veiculo)) {
+                apartamento = dadosCondominio.consultaCodigoApartamento(veiculo.getCodigoApartamento());
+                String cpfValido = dadosCondominio.validaCpf(morador.getCpfMorador());
+                String verificaNumeroCpf = dadosCondominio.validaNumero(morador.getCpfMorador(), 20);
+
+                if (cpfValido.equals("Ok")) {
+                    if (verificaNumeroCpf.equals("Numero")) {
+                        if (dadosCondominio.validaNome(morador.getNomeMorador()) == true) {
+                            int vaga = dadosCondominio.consultaVagaVeiculo(veiculo);
+                            System.out.println("vaga ----> " + vaga);
+
+                            if (vaga < 2) {
+                                //--------------------------Inserir Morador------------------------
+                                if (salvar.equals("Incluir")) {
+                                    if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Veículo?",
+                                            "Incluir Veiculo", JOptionPane.YES_NO_OPTION) == 0) {
+                                        msg = dadosCondominio.insereVeiculo(veiculo);
+                                        JOptionPane.showMessageDialog(this, msg, "Incluir Veiculo", JOptionPane.INFORMATION_MESSAGE);
+                                        limparVeiculo();
+                                        statusInicioVeiculo(true);
+                                        exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+                                    }
+
+                                    //--------------------------Alterar Morador------------------------
+                                } else if (salvar.equals("Alterar")) {
+                                    if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Veículo?",
+                                            "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                        setVeiculo();
+                                        msg = dadosCondominio.alteraVeiculo(veiculo);
+                                        JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                        limparVeiculo();
+                                        statusInicioVeiculo(true);
+                                        exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+                                    }
+                                }
+
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Não há vaga de estacionamento no apartamento do bloco "
+                                        + apartamento.getBlocoApartamento() + " Número "
+                                        + apartamento.getNumeroApartamento(), "Sem vaga de estacionamento", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
+                                    "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Digite apenas numeros, sem ponto.",
+                                "CPF Inválido", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, cpfValido,
+                            "CPF Incorreto", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, preencha os dados do veículo.", "Dados do veículo vazio", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Digite corretamente o CPF do morador e clique no botão ao lado para preencher os dados do morador.",
+                        "Campos do morador vazio.", JOptionPane.ERROR_MESSAGE);
+        }
+       
     }//GEN-LAST:event_btnSalvarVeiculoActionPerformed
 
     private void btnLocalizarCodFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCodFunActionPerformed
@@ -1836,6 +2246,8 @@ public class Principal extends javax.swing.JFrame {
         String ativo = (String) jTableFuncionario.getValueAt(posicao, 6);
         funcionario = dadosCondominio.consultaCpfFuncionario(String.valueOf(jTableFuncionario.getValueAt(posicao, 1)));
         getFuncionario();
+        exibeGridGeral();
+
     }//GEN-LAST:event_jTableFuncionarioMouseClicked
 
     private void btnExcluirFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirFunActionPerformed
@@ -1881,7 +2293,7 @@ public class Principal extends javax.swing.JFrame {
         morador = dadosCondominio.consultaCpfMorador(cpf);
 
         if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
-            if(morador != null) {
+            if (morador != null) {
                 getMorador(morador);
                 statusAlterarMorador(true);
             } else {
@@ -1895,34 +2307,68 @@ public class Principal extends javax.swing.JFrame {
             limparMorador();
             JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
                     JOptionPane.ERROR_MESSAGE);
-            
+
         }
-//        if (!dadosCondominio.validaCpf(cpf).equals("Ok")) {
-//            if (morador == null) {
-//                JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
-//                        JOptionPane.ERROR_MESSAGE);
-//                statusInicioMorador(true);
-//                limparMorador();
-//            } else {
-//                getMorador();
-//                statusAlterarMorador(true);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
-//                    JOptionPane.ERROR_MESSAGE);
-//            statusAlterarMorador(true);
-//            limparMorador();
-//        }
-
     }//GEN-LAST:event_btnLocalizarCpfMoradorActionPerformed
-
-    private void btnLocalizarNomeMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarNomeMoradorActionPerformed
-
-        statusAlterarMorador(true);
-    }//GEN-LAST:event_btnLocalizarNomeMoradorActionPerformed
 
     private void btnIncluirVisitanteListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirVisitanteListaActionPerformed
 
+        String msg = visitante.verificaCampoCpfVazio(txtCpfVisitanteVisita.getText());
+        String cpfVisitante = txtCpfVisitanteVisita.getText();
+
+        if (msg.equals("Ok")) {
+            if (dadosCondominio.validaNumero(txtCpfVisitanteVisita.getText(), 20).equals("Numero")) {
+                if (dadosCondominio.validaCpf(txtCpfVisitanteVisita.getText()).equals("Ok")) {
+                    Visitante recebeVisitante = dadosCondominio.consultaCpfVisitante(cpfVisitante);
+                    if (recebeVisitante == null) {
+                        
+
+                        String nomeVisitante = JOptionPane.showInputDialog(null, "Digite o nome do Visitante", "Cadastrar Visitante", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        if(nomeVisitante != null) {
+                            String cpfVisitanteVisita = txtCpfVisitanteVisita.getText();
+
+                            txtNomeVisitanteVisita.setText(nomeVisitante);
+
+                            visitante.setCpfVisitante(cpfVisitanteVisita);
+                            visitante.setNomeVisitante(nomeVisitante);
+
+                            if (JOptionPane.showConfirmDialog(this, "Deseja cadastrar o Visitante com o CPF:  "
+                                    + txtCpfVisitanteVisita.getText() + " no banco de dados?", "Cadastrar Visitante",
+                                    JOptionPane.YES_NO_OPTION) == 0) {
+                                msg = dadosCondominio.insereVisitante(visitante);
+                                JOptionPane.showMessageDialog(this, msg);
+                                exibeGridGeral();
+                            } else {
+                                txtCpfVisitanteVisita.setText("");
+                                txtNomeVisitanteVisita.setText("");
+                                JOptionPane.showMessageDialog(this, "Visitante não cadastrdado.");
+                            }
+                        }
+                        
+                        
+                    } else {
+                        if (recebeVisitante != null) {
+                            JOptionPane.showMessageDialog(this, "Visitante já cadastrado", "Visitante já cadastrado", JOptionPane.INFORMATION_MESSAGE);
+                            txtNomeVisitanteVisita.setText(dadosCondominio.consultaCpfVisitante(cpfVisitante).getNomeVisitante());
+                        }
+
+                    }
+
+                    //-->
+                } else {
+                    JOptionPane.showMessageDialog(this, "Um CPF válido comtém 11 dígitos", "CPF inválido",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Digite apenas Números sem ponto", "CPF inválido",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, msg, "Campo do CPF Vazio",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
     }//GEN-LAST:event_btnIncluirVisitanteListaActionPerformed
 
     private void jTableApartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableApartamentoMouseClicked
@@ -1932,38 +2378,264 @@ public class Principal extends javax.swing.JFrame {
         int posicao = jTableApartamento.getSelectedRow();
         apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(jTableApartamento.getValueAt(posicao, 0).toString()));
         getApartamento();
+        exibeGridGeral();
     }//GEN-LAST:event_jTableApartamentoMouseClicked
 
     private void btnExcluirApartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirApartamentoActionPerformed
 
-        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o apartamento "
-                + txtNumeroApartamento.getText() + " do bloco " + txtBlocoApartamento.getText()
-                + " do banco de dados?", "Excluir Funcionário",
-                JOptionPane.YES_NO_OPTION) == 0) {
-            String codigo = txtCodApartamento.getText();
-            dadosCondominio.excluiApartamento(codigo);
-            exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
-            limparApartamento();
+        Apartamento pegaApartamento = dadosCondominio.verificaExisteApartamento(txtBlocoApartamento.getText(), Integer.valueOf(txtNumeroApartamento.getText()));
+
+        if (pegaApartamento != null) {
+            List<Morador> listMorador = dadosCondominio.consultaMoradorCodigoApartamento(pegaApartamento.getCodigoApartamento());
+
+            if (listMorador.size() > 0) {
+                for (Morador mor : listMorador) {
+                    List<Veiculo> listVeiculo = dadosCondominio.consultaVeiculoPeloCpfMorador(mor.getCpfMorador());
+                    if (listVeiculo.size() > 0) {
+                        for (Veiculo vei : listVeiculo) {
+                            dadosCondominio.excluiVeiculo(vei.getPlaca());
+                        }
+                    }
+
+                    List<Visita> listVisita = dadosCondominio.consultaVisitaPeloCpfMorador(mor.getCpfMorador());
+
+                    if (listVisita.size() > 0) {
+                        for (Visita vis : listVisita) {
+                            dadosCondominio.excluiVisita(vis.getCodVisita());
+                        }
+                    }
+
+                    dadosCondominio.excluiMorador(mor.getCpfMorador());
+                    exibeGridGeral();
+                }
+            } else {
+                if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o apartamento "
+                        + txtNumeroApartamento.getText() + " do bloco " + txtBlocoApartamento.getText()
+                        + " do banco de dados?", "Excluir Funcionário",
+                        JOptionPane.YES_NO_OPTION) == 0) {
+                    String codigo = txtCodApartamento.getText();
+                    dadosCondominio.excluiApartamento(codigo);
+                    exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                    limparApartamento();
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Apartamento bloco " + txtBlocoApartamento.getText() + ", número " + txtNumeroApartamento.getText() + " não existe", "Apartamento não cadastrado", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }//GEN-LAST:event_btnExcluirApartamentoActionPerformed
 
     private void jTableMoradorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMoradorMouseClicked
+
         salvar = "Alterar";
         statusAlterarMorador(true);
         int posicao = jTableMorador.getSelectedRow();
         morador = dadosCondominio.consultaCpfMorador(String.valueOf(jTableMorador.getValueAt(posicao, 0)));
+        System.out.println("cpf morador ----> " + morador.getCpfMorador());
+        cpfAntigo = morador.getCpfMorador();
+        Apartamento pegaApart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
+        txtBlocoApartamentoMorador.setText(pegaApart.getBlocoApartamento());
+        txtNumeroApartamentoMorador.setText(pegaApart.getNumeroApartamento());
         getMorador(morador);    }//GEN-LAST:event_jTableMoradorMouseClicked
 
     private void btnExcluirMoradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirMoradorActionPerformed
-        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o Morador "
-                + txtNomeMorador.getText() + " do banco de dados?", "Excluir Morador",
-                JOptionPane.YES_NO_OPTION) == 0) {
-            String cpfMorador = txtCpfMorador.getText();
-            dadosCondominio.excluiMorador(cpfMorador);
+        List<Veiculo> listaVeiculo = dadosCondominio.consultaVeiculoPeloCpfMorador(txtCpfMorador.getText());
+        List<Visita> listaVisita = dadosCondominio.consultaVisitaPeloCpfMorador(txtCpfMorador.getText());
+
+        if (listaVeiculo.isEmpty() && listaVisita.isEmpty()) {
+            excluiMorador(morador);
             exibeGridMorador(dadosCondominio.consultaGeralMorador());
-            limparMorador();
+        } else {
+            if (!listaVeiculo.isEmpty()) {
+                for (Veiculo pegaVeiculo : listaVeiculo) {
+                    dadosCondominio.excluiVeiculo(pegaVeiculo.getPlaca());
+                }
+            }
+            if (!listaVisita.isEmpty()) {
+                for (Visita pegaVisita : listaVisita) {
+                    dadosCondominio.excluiVisita(pegaVisita.getCodVisita());
+                }
+            }
+            excluiMorador(morador);
+            exibeGridMorador(dadosCondominio.consultaGeralMorador());
         }
+
     }//GEN-LAST:event_btnExcluirMoradorActionPerformed
+
+    private void jTableVisitanteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVisitanteMouseClicked
+
+        salvar = "Alterar";
+        int posicao = jTableVisitante.getSelectedRow();
+        visitante = dadosCondominio.consultaCpfVisitante(String.valueOf(jTableVisitante.getValueAt(posicao, 0)));
+        getVisitante(visitante);
+        cpfAntigo = visitante.getCpfVisitante();
+        exibeGridGeral();
+    }//GEN-LAST:event_jTableVisitanteMouseClicked
+
+    private void btnLocalizarCpfVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfVisitanteActionPerformed
+        salvar = "Alterar";
+        String cpf = txtCpfVisitante.getText();
+        visitante = dadosCondominio.consultaCpfVisitante(cpf);
+
+        if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+            if (visitante != null) {
+                getVisitante(visitante);
+            } else {
+                JOptionPane.showMessageDialog(this, "Visitante não encontrado", "CPF não cadastrado",
+                        JOptionPane.ERROR_MESSAGE);
+                limparVisitante();
+            }
+        } else {
+            limparVisitante();
+            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+    }//GEN-LAST:event_btnLocalizarCpfVisitanteActionPerformed
+
+    private void btnLocalizarCpfMoradorVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfMoradorVisitaActionPerformed
+        String cpf = txtCpfMoradorVisita.getText();
+        morador = dadosCondominio.consultaCpfMorador(cpf);
+
+        if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+            if (morador != null) {
+                txtNomeMoradorVisita.setText(morador.getNomeMorador());
+            } else {
+                JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+    }//GEN-LAST:event_btnLocalizarCpfMoradorVisitaActionPerformed
+
+    private void jTableHistoricoVisitaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableHistoricoVisitaMouseClicked
+
+        salvar = "Alterar";
+        statusAlterarVisita(true);
+        int posicao = jTableHistoricoVisita.getSelectedRow();
+        visita = dadosCondominio.consultaCodigoVisita(Integer.parseInt(jTableHistoricoVisita.getValueAt(posicao, 0).toString()));
+        getVisita(visita);
+        exibeGridGeral();
+
+        System.out.println("visita cod " + visita.getCodVisita());
+        System.out.println("visitante" + visita.getCpfMoradorVisita());
+        System.out.println("morador " + visita.getCpfVisitanteVisita());
+    }//GEN-LAST:event_jTableHistoricoVisitaMouseClicked
+
+    private void btnExcluirVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitanteActionPerformed
+        List<Visita> listVisita = new LinkedList<>();
+        listVisita = dadosCondominio.consultaVisitaPeloCpfVisitante(txtCpfVisitante.getText());
+
+        if (!listVisita.isEmpty()) {
+            excluiVisitante(txtCpfVisitante.getText());
+            exibeGridVisitante(rsCondominioVisitante);
+            for (Visita vis : listVisita) {
+                dadosCondominio.excluiVisita(vis.getCodVisita());
+            }
+
+        } else {
+            excluiVisitante(txtCpfVisitante.getText());
+        }
+        exibeGridGeral();
+    }//GEN-LAST:event_btnExcluirVisitanteActionPerformed
+
+    private void btnLocalizarPlacaVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarPlacaVeiculoActionPerformed
+        String placa = txtPlacaVeiculo.getText();
+        veiculo = dadosCondominio.consultaPlacaVeiculo(placa);
+
+        if (veiculo != null) {
+            morador = dadosCondominio.consultaCpfMorador(veiculo.getCpfMorador());
+            apartamento = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
+
+            txtModeloVeiculo.setText(veiculo.getModelo());
+            txtCorVeiculo.setText(veiculo.getCor());
+            txtFabricanteVeiculo.setText(veiculo.getFabricante());
+            txtCpfMoradorVeiculo.setText(veiculo.getCpfMorador());
+            txtNomeMoradorVeiculo.setText(morador.getNomeMorador());
+            txtBlocoApartamentoVeiculo.setText(apartamento.getBlocoApartamento());
+            txtNumeroApartamentoVeiculo.setText(apartamento.getNumeroApartamento());
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Veículo não encontrado", "Placa do veículo não cadastrado",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnLocalizarPlacaVeiculoActionPerformed
+
+    private void btnLocalizarCpfMoradorVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfMoradorVeiculoActionPerformed
+        String cpf = txtCpfMoradorVeiculo.getText();
+        morador = dadosCondominio.consultaCpfMorador(cpf);
+        apartamento = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
+
+        if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+            if (morador != null) {
+                txtNomeMoradorVeiculo.setText(morador.getNomeMorador());
+                txtBlocoApartamentoVeiculo.setText(apartamento.getBlocoApartamento());
+                txtNumeroApartamentoVeiculo.setText(apartamento.getNumeroApartamento());
+            } else {
+                JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
+                        JOptionPane.ERROR_MESSAGE);
+                txtNomeMoradorVeiculo.setText("");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+    }//GEN-LAST:event_btnLocalizarCpfMoradorVeiculoActionPerformed
+
+    private void btnExcluirVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVeiculoActionPerformed
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o Veículo "
+                + txtModeloVeiculo.getText() + " com a placa " + txtPlacaVeiculo.getText() + " do banco de dados?", "Excluir Veículo",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            String placa = txtPlacaVeiculo.getText();
+            dadosCondominio.excluiVeiculo(placa);
+            exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+            limparVeiculo();
+        }
+    }//GEN-LAST:event_btnExcluirVeiculoActionPerformed
+
+    private void jTableVeiculoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVeiculoMouseClicked
+
+        salvar = "Alterar";
+        statusAlterarVeiculo(true);
+        int posicao = jTableVeiculo.getSelectedRow();
+        veiculo = dadosCondominio.consultaPlacaVeiculo(String.valueOf(jTableVeiculo.getValueAt(posicao, 0)));
+        morador = dadosCondominio.consultaCpfMorador(veiculo.getCpfMorador());
+        apartamento = dadosCondominio.consultaCodigoApartamento(veiculo.getCodigoApartamento());
+        veiculo.setNomeMorador(morador.getNomeMorador());
+        veiculo.setBlocoApartamento(apartamento.getBlocoApartamento());
+        veiculo.setNumeroApartamento(apartamento.getNumeroApartamento());
+        getVeiculo(veiculo);
+        exibeGridGeral();
+    }//GEN-LAST:event_jTableVeiculoMouseClicked
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        /*
+        exibeGridFuncionario(rsCondominioFuncionario);
+        exibeGridApartamento(rsCondominioApartamento);
+        exibeGridMorador(rsCondominioMorador);
+        exibeGridVisita(rsCondominioVisita);
+        exibeGridVisitante(rsCondominioVisitante);
+        exibeGridVeiculo(rsCondominioVeiculo);
+        txtDataVisita.setText(getData("data"));
+        txtHoraVisita.setText(getData("hora"));
+         */
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void btnExcluirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitaActionPerformed
+        
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir os dados da Visita?", "Excluir Funcionário",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            int codigo = visita.getCodVisita();
+            dadosCondominio.excluiVisita(codigo);
+            exibeGridVisita(dadosCondominio.consultaGeralVisita());
+            limparVisita();
+        }
+    }//GEN-LAST:event_btnExcluirVisitaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2062,8 +2734,10 @@ public class Principal extends javax.swing.JFrame {
     private void setApartamento() {
         apartamento.setNumeroApartamento(txtNumeroApartamento.getText());
         apartamento.setBlocoApartamento(txtBlocoApartamento.getText());
-        apartamento.setVagaApartamento_1(txtEstacionamento1.getText());
-        apartamento.setVagaApartamento_2(txtEstacionamento2.getName());
+        apartamento.setVagaApartamento_1(txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "1");
+        apartamento.setVagaApartamento_2(txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "2");
+        System.out.println("setVagaApartamento_1 ----> " + txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "1");
+        System.out.println("setVagaApartamento_2 ----> " + txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "2");
     }
 
     private void getApartamento() {
@@ -2095,6 +2769,27 @@ public class Principal extends javax.swing.JFrame {
         morador.setAtivoMorador(ativo);
     }
 
+    private void setMorador(int codigoApartamento) {
+        String ativo;
+
+        if (radioSimMorador.isSelected()) {
+            ativo = "Sim";
+        } else if (radioNaoMorador.isSelected()) {
+            ativo = "Nao";
+        } else {
+            ativo = "Vazio";
+        }
+
+        morador.setCpfMorador(txtCpfMorador.getText());
+        morador.setNomeMorador(txtNomeMorador.getText());
+        morador.setTelefoneMorador(txtTelefoneMorador.getText());
+        morador.setEmailMorador(txtEmailMorador.getText());
+        morador.setBlocoApartamentoMorador(txtBlocoApartamentoMorador.getText());
+        morador.setNumeroApartamentoMorador(txtNumeroApartamentoMorador.getText());
+        morador.setAtivoMorador(ativo);
+        morador.setCodigoApartamento(codigoApartamento);
+    }
+
     private void getMorador(Morador morador) {
         String ativo = morador.getAtivoMorador();
 
@@ -2105,17 +2800,134 @@ public class Principal extends javax.swing.JFrame {
         }
 
         Apartamento apart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoMorador());
-        
-        if(apart != null) {
+
+        if (apart != null) {
             txtBlocoApartamentoMorador.setText(apart.getBlocoApartamento());
             txtNumeroApartamentoMorador.setText(apart.getNumeroApartamento());
         }
-        
+
         txtCpfMorador.setText(morador.getCpfMorador());
         txtNomeMorador.setText(morador.getNomeMorador());
         txtTelefoneMorador.setText(morador.getTelefoneMorador());
         txtEmailMorador.setText(morador.getEmailMorador());
-        
+
+    }
+
+    private void excluiMorador(Morador morador) {
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o Morador "
+                + morador.getNomeMorador() + " do banco de dados?", "Excluir Morador",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            dadosCondominio.excluiMorador(morador.getCpfMorador());
+            exibeGridMorador(dadosCondominio.consultaGeralMorador());
+            limparMorador();
+        }
+    }
+
+    //---------------Método do Visita---------------
+    private void setVisita() {
+        visita.setData(txtDataVisita.getText());
+        visita.setHora(txtHoraVisita.getText());
+        visita.setCpfMoradorVisita(txtCpfMoradorVisita.getText());
+        visita.setNomeMoradorVisita(txtNomeMoradorVisita.getText());
+        visita.setCpfVisitanteVisita(txtCpfVisitanteVisita.getText());
+        visita.setNomeVisitanteVisita(txtNomeMoradorVisita.getText());
+    }
+
+    private void getVisita(Visita visita) {
+        Visitante recebeVisitante = dadosCondominio.consultaCpfVisitante(visita.getCpfVisitanteVisita());
+        Morador recebeMorador = dadosCondominio.consultaCpfMorador(visita.getCpfMoradorVisita());
+
+        if (recebeVisitante != null && recebeMorador != null) {
+            txtCpfMoradorVisita.setText(String.valueOf(visita.getCpfMoradorVisita()));
+            txtNomeMoradorVisita.setText(recebeMorador.getNomeMorador());
+            txtCpfVisitanteVisita.setText(String.valueOf(visita.getCpfVisitanteVisita()));
+            txtNomeVisitanteVisita.setText(recebeVisitante.getNomeVisitante());
+        }
+
+        txtDataVisita.setText(visita.getData());
+        txtHoraVisita.setText(visita.getHora());
+
+        System.out.println("visita cod " + visita.getCodVisita());
+        System.out.println("visitante" + visitante.getCpfVisitante());
+        System.out.println("morador " + morador.getCpfMorador());
+    }
+    
+    private boolean verificaCampoVazioVisita() {
+        if(!txtDataVisita.equals("") || !txtHoraVisita.equals("") || !txtCpfVisitanteVisita.equals("") ||
+                !txtNomeVisitanteVisita.equals("") || !txtCpfMoradorVisita.equals("") || !txtNomeMoradorVisita.equals("")) {
+            return true;
+        } else return false;
+    }
+
+    //---------------Método do Visitante---------------
+    private void setVisitante() {
+        visitante.setCpfVisitante(txtCpfVisitante.getText());
+        visitante.setNomeVisitante(txtNomeVisitante.getText());
+    }
+
+    private void getVisitante(Visitante visitante) {
+        txtCpfVisitante.setText(visitante.getCpfVisitante());
+        txtNomeVisitante.setText(visitante.getNomeVisitante());
+    }
+
+    private void excluiVisitante(String cpfVisitante) {
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o Visitante "
+                + txtNomeVisitante.getText() + " do banco de dados?", "Excluir Morador",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            dadosCondominio.excluiVisitante(cpfVisitante);
+            exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
+            limparVisitante();
+        }
+    }
+
+    public void preencheVisitanteVisita(Visitante visitante) {
+        txtNomeVisitanteVisita.setText(visitante.getNomeVisitante());
+        exibeGridGeral();
+        System.out.println("preencheVisitanteVisita ----> " + visitante.getNomeVisitante());
+    }
+
+    //---------------Método do Veiculo---------------
+    private void setVeiculo() {
+        Apartamento recebeApartamento = dadosCondominio.verificaExisteApartamento(txtBlocoApartamentoVeiculo.getText(), Integer.parseInt(txtNumeroApartamentoVeiculo.getText()));
+        Morador recebeMorador = dadosCondominio.consultaCpfMorador(txtCpfMoradorVeiculo.getText());
+        veiculo.setPlaca(txtPlacaVeiculo.getText());
+        veiculo.setModelo(txtModeloVeiculo.getText());
+        veiculo.setFabricante(txtFabricanteVeiculo.getText());
+        veiculo.setCor(txtCorVeiculo.getText());
+        veiculo.setCpfMorador(txtCpfMoradorVeiculo.getText());
+        veiculo.setCodigoApartamento(recebeApartamento.getCodigoApartamento());
+        veiculo.setNomeMorador(recebeMorador.getNomeMorador());
+        veiculo.setBlocoApartamento(recebeApartamento.getBlocoApartamento());
+        veiculo.setNumeroApartamento(recebeApartamento.getNumeroApartamento());
+    }
+
+    private void getVeiculo(Veiculo veiculo) {
+        txtPlacaVeiculo.setText(veiculo.getPlaca());
+        txtModeloVeiculo.setText(veiculo.getModelo());
+        txtFabricanteVeiculo.setText(veiculo.getFabricante());
+        txtCorVeiculo.setText(veiculo.getCor());
+        txtCpfMoradorVeiculo.setText(veiculo.getCpfMorador());
+        txtNomeMoradorVeiculo.setText(veiculo.getNomeMorador());
+        txtBlocoApartamentoVeiculo.setText(veiculo.getBlocoApartamento());
+        txtNumeroApartamentoVeiculo.setText(veiculo.getNumeroApartamento());
+    }
+
+    private boolean verificaCampoVazioDadosMoradorVeiculo() {
+        if (txtNomeMoradorVeiculo.equals("") || txtBlocoApartamentoVeiculo.equals("") || txtNumeroApartamentoVeiculo.equals("")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //---------------Métodos Gerais---------------
+    private void exibeGridGeral() {
+        exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+        exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+        exibeGridMorador(dadosCondominio.consultaGeralMorador());
+        exibeGridVisita(dadosCondominio.consultaGeralVisita());
+        exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
+        exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2149,7 +2961,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnLocalizarCpfMoradorVeiculo;
     private javax.swing.JButton btnLocalizarCpfMoradorVisita;
     private javax.swing.JButton btnLocalizarCpfVisitante;
-    private javax.swing.JButton btnLocalizarNomeMorador;
     private javax.swing.JButton btnLocalizarNomeVisitante;
     private javax.swing.JButton btnLocalizarPlacaVeiculo;
     private javax.swing.JButton btnLogout;
@@ -2229,7 +3040,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    public javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableApartamento;
     private javax.swing.JTable jTableFuncionario;
     private javax.swing.JTable jTableHistoricoVisita;
