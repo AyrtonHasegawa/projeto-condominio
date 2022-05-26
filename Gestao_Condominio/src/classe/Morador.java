@@ -11,7 +11,7 @@ import java.sql.Connection;
  * @author Ayrton Hasegawa
  */
 public class Morador {
-    private int codigoMorador;
+    private int codigoMorador, codigoApartamento;
     private String cpfMorador, nomeMorador, telefoneMorador, emailMorador, 
             blocoApartamentoMorador, numeroApartamentoMorador, ativo;
     
@@ -52,7 +52,11 @@ public class Morador {
     public String getAtivoMorador() {
         return ativo;
     }
-    
+
+    public int getCodigoApartamento() {
+        return codigoApartamento;
+    }
+        
 //-----Setter-----
     public void setCodigoMorador(int codigoMorador) {
         this.codigoMorador = codigoMorador;
@@ -84,6 +88,10 @@ public class Morador {
 
     public void setAtivoMorador(String ativo) {
         this.ativo = ativo;
+    }
+
+    public void setCodigoApartamento(int codigoApartamento) {
+        this.codigoApartamento = codigoApartamento;
     }
     
     public boolean verificaCampoVazio(Morador morador) {
