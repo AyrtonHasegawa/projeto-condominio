@@ -7,6 +7,7 @@ package view;
 
 import classe.DadosCondominio;
 import classe.Funcionario;
+import classe.FuncionarioAtual;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +18,7 @@ public class Login extends javax.swing.JFrame {
 
     static String usuarioAtual, senhaAtual;
     Funcionario funcionarioAtual = new Funcionario();
+    FuncionarioAtual fun = new FuncionarioAtual();
     DadosCondominio dadosCondominio = new DadosCondominio();
     
     public Login() {
@@ -147,7 +149,10 @@ public class Login extends javax.swing.JFrame {
             if (funcionarioAtual == null) {
                 if (login.equals("Admin") && senha.equals("123456")) {
                     usuarioAtual = "Funcionário Padrão";
+                    
+                    fun.setNome(usuarioAtual);
                     principal.setVisible(true);
+                    System.out.println("funcionario Login ----> " + fun.getNome());
                     this.dispose();
                 }else{
                     JOptionPane.showMessageDialog(this, "Por favor, digite o login e senha", 
@@ -155,6 +160,7 @@ public class Login extends javax.swing.JFrame {
                 }                              
             }else if (funcionarioAtual.getSenha().equals(senha)) {
                 usuarioAtual = funcionarioAtual.getNome();
+                fun.setNome(usuarioAtual);
                 principal.setVisible(true);
                 this.dispose();
             }

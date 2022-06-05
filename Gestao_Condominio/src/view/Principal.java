@@ -13,6 +13,7 @@ import classe.Morador;
 import classe.Visita;
 import classe.Visitante;
 import classe.Veiculo;
+import classe.FuncionarioAtual;
 import view.Login;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,7 @@ public class Principal extends javax.swing.JFrame {
 
     Login login = new Login();
     Funcionario funcionario = new Funcionario();
+    FuncionarioAtual funcionarioAtual = new FuncionarioAtual();
     Apartamento apartamento = new Apartamento();
     Morador morador = new Morador();
     Visita visita = new Visita();
@@ -51,8 +53,9 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();
+        System.out.println("funcionario login principal ----> " + funcionarioAtual.getNome());
         lblMsg.setText(dadosCondominio.getCon());
-        //lblNome_Fun.setText(login.chama());
+        lblNome_Fun.setText(funcionarioAtual.getNome());
         exibeGridGeral();
         statusInicio();
         txtDataVisita.setText(getData("data"));
@@ -731,7 +734,6 @@ public class Principal extends javax.swing.JFrame {
         btnLocalizarCpfVisitante = new javax.swing.JButton();
         jLabel74 = new javax.swing.JLabel();
         txtNomeVisitante = new javax.swing.JTextField();
-        btnLocalizarNomeVisitante = new javax.swing.JButton();
         painelApartamento = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -861,13 +863,16 @@ public class Principal extends javax.swing.JFrame {
         painelFuncionario.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, -1));
 
         txtNomeFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeFun.setToolTipText("Digite o nome do funcionário.");
         painelFuncionario.add(txtNomeFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 360, -1));
 
         txtCpfFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfFun.setToolTipText("Digite o CPF do funcionário.");
         painelFuncionario.add(txtCpfFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 130, -1));
 
         btnLocalizarCodFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCodFun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2.png"))); // NOI18N
+        btnLocalizarCodFun.setToolTipText("Clique aqui para buscar funcionário pelo código.");
         btnLocalizarCodFun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCodFunActionPerformed(evt);
@@ -880,6 +885,7 @@ public class Principal extends javax.swing.JFrame {
         painelFuncionario.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
         txtCargoFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCargoFun.setToolTipText("Digite o cargo do funcionário.");
         painelFuncionario.add(txtCargoFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, 230, -1));
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -887,9 +893,11 @@ public class Principal extends javax.swing.JFrame {
         painelFuncionario.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 160, -1, -1));
 
         txtLoginFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtLoginFun.setToolTipText("Login é gerado automaticamente recebendo o CPF do funcionário.");
         painelFuncionario.add(txtLoginFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 130, -1));
 
         txtEnderecoFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEnderecoFun.setToolTipText("Digite o endereço do funcionário.");
         painelFuncionario.add(txtEnderecoFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 160, 500, -1));
 
         jLabel39.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -897,6 +905,7 @@ public class Principal extends javax.swing.JFrame {
         painelFuncionario.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
 
         txtCodFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCodFun.setToolTipText("Código do Funcionário.");
         painelFuncionario.add(txtCodFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 80, -1));
 
         jLabel40.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -967,6 +976,7 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfFun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2.png"))); // NOI18N
+        btnLocalizarCpfFun.setToolTipText("Clique aqui para buscar funcionário pelo CPF.");
         btnLocalizarCpfFun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCpfFunActionPerformed(evt);
@@ -990,11 +1000,13 @@ public class Principal extends javax.swing.JFrame {
         grupoBotaoFuncionario.add(radioNaoFun);
         radioNaoFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radioNaoFun.setText("NÃO");
+        radioNaoFun.setToolTipText("Esse funcionário ainda trabalha no condomínio?");
         painelFuncionario.add(radioNaoFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
 
         grupoBotaoFuncionario.add(radioSimFun);
         radioSimFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radioSimFun.setText("SIM");
+        radioSimFun.setToolTipText("Esse funcionário ainda trabalha no condomínio?");
         painelFuncionario.add(radioSimFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1002,6 +1014,7 @@ public class Principal extends javax.swing.JFrame {
         painelFuncionario.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, -1, -1));
 
         txtTelefoneFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtTelefoneFun.setToolTipText("Digite o telefone do funcionário.");
         painelFuncionario.add(txtTelefoneFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 130, -1));
 
         jLabel46.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1010,6 +1023,7 @@ public class Principal extends javax.swing.JFrame {
 
         txtSenhaFun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtSenhaFun.setText("123456");
+        txtSenhaFun.setToolTipText("Digite a senha com no máximo 20 dígitos.");
         painelFuncionario.add(txtSenhaFun, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 200, 140, -1));
 
         jTabbedPane1.addTab("Funcionário", painelFuncionario);
@@ -1086,6 +1100,7 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, -1, -1));
 
         txtNomeMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeMorador.setToolTipText("Digite o nome do morador.");
         painelMorador.add(txtNomeMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, 330, -1));
 
         jLabel54.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1093,10 +1108,12 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 180, -1, -1));
 
         txtEmailMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEmailMorador.setToolTipText("Digite o email do morador.");
         painelMorador.add(txtEmailMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 210, -1));
 
         btnLocalizarCpfMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMorador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfMorador.setToolTipText("Clique aqui para buscar CPF digitado.");
         btnLocalizarCpfMorador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCpfMoradorActionPerformed(evt);
@@ -1118,6 +1135,7 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
 
         txtCpfMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfMorador.setToolTipText("Digite o CPF do morador.");
         painelMorador.add(txtCpfMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 130, -1));
 
         jLabel61.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1125,6 +1143,7 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 180, -1, -1));
 
         txtNumeroApartamentoMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNumeroApartamentoMorador.setToolTipText("Digite o número do apartamento do morador.");
         painelMorador.add(txtNumeroApartamentoMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 180, 130, -1));
 
         jLabel62.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1134,11 +1153,13 @@ public class Principal extends javax.swing.JFrame {
         grupoBotaoMorador.add(radioSimMorador);
         radioSimMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radioSimMorador.setText("SIM");
+        radioSimMorador.setToolTipText("O proprietário desse CPF ainda mora no condomínio?");
         painelMorador.add(radioSimMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 130, -1, -1));
 
         grupoBotaoMorador.add(radioNaoMorador);
         radioNaoMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         radioNaoMorador.setText("NÃO");
+        radioNaoMorador.setToolTipText("O proprietário desse CPF ainda mora no condomínio?");
         painelMorador.add(radioNaoMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 130, -1, -1));
 
         jLabel63.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1146,6 +1167,7 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         txtTelefoneMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtTelefoneMorador.setToolTipText("Digite o telefone do morador.");
         painelMorador.add(txtTelefoneMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, 130, -1));
 
         jLabel64.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1153,6 +1175,7 @@ public class Principal extends javax.swing.JFrame {
         painelMorador.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, -1, -1));
 
         txtBlocoApartamentoMorador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtBlocoApartamentoMorador.setToolTipText("Digite o bloco do morador.");
         painelMorador.add(txtBlocoApartamentoMorador, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 130, -1));
 
         jTabbedPane1.addTab("Morador", painelMorador);
@@ -1177,6 +1200,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         txtHoraVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtHoraVisita.setToolTipText("Hora da visita (não editável).");
         painelVisita.add(txtHoraVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 100, -1));
 
         btnLimparVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1202,6 +1226,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
 
         txtDataVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtDataVisita.setToolTipText("Data da visita (não editável).");
         painelVisita.add(txtDataVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 100, -1));
 
         jTableHistoricoVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1230,6 +1255,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         txtCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfMoradorVisita.setToolTipText("CPF do Morador a ser visitado.");
         painelVisita.add(txtCpfMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 350, 300, -1));
 
         jLabel70.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1237,6 +1263,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, -1, -1));
 
         txtNomeVisitanteVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeVisitanteVisita.setToolTipText("Nome do visitante (não editável).");
         painelVisita.add(txtNomeVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 380, -1));
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1248,6 +1275,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 350, -1, -1));
 
         txtCpfVisitanteVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfVisitanteVisita.setToolTipText("Digite o CPF do visitante.");
         painelVisita.add(txtCpfVisitanteVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, 190, -1));
 
         jLabel72.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1255,6 +1283,7 @@ public class Principal extends javax.swing.JFrame {
         painelVisita.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 410, -1, -1));
 
         txtNomeMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeMoradorVisita.setToolTipText("Nome do morador a ser visitado (não editável).");
         painelVisita.add(txtNomeMoradorVisita, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 410, 370, -1));
 
         btnSalvarVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1268,6 +1297,7 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfMoradorVisita.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVisita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfMoradorVisita.setToolTipText("Clique aqui para consultar o CPF do morador a ser visitado.");
         btnLocalizarCpfMoradorVisita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCpfMoradorVisitaActionPerformed(evt);
@@ -1277,6 +1307,7 @@ public class Principal extends javax.swing.JFrame {
 
         btnIncluirVisitanteLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIncluirVisitanteLista.setText("Incluir Visitante");
+        btnIncluirVisitanteLista.setToolTipText("Incluir visitante no histórico da visita.");
         btnIncluirVisitanteLista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIncluirVisitanteListaActionPerformed(evt);
@@ -1363,10 +1394,12 @@ public class Principal extends javax.swing.JFrame {
         painelVisitante.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtCpfVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfVisitante.setToolTipText("CPF do visitante.");
         painelVisitante.add(txtCpfVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 130, -1));
 
         btnLocalizarCpfVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfVisitante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfVisitante.setToolTipText("Clique aqui para consultar CPF do visitante.");
         btnLocalizarCpfVisitante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCpfVisitanteActionPerformed(evt);
@@ -1379,11 +1412,8 @@ public class Principal extends javax.swing.JFrame {
         painelVisitante.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, -1, -1));
 
         txtNomeVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeVisitante.setToolTipText("Nome do visitante.");
         painelVisitante.add(txtNomeVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 120, 450, -1));
-
-        btnLocalizarNomeVisitante.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLocalizarNomeVisitante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
-        painelVisitante.add(btnLocalizarNomeVisitante, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 120, 20, 20));
 
         jTabbedPane1.addTab("Visitante", painelVisitante);
 
@@ -1437,10 +1467,12 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
 
         txtCodApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCodApartamento.setToolTipText("Código do apartamento.");
         painelApartamento.add(txtCodApartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, 190, -1));
 
         btnLocalizarCodApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCodApartamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCodApartamento.setToolTipText("Clique aqui para consultar pelo código do apartamento.");
         btnLocalizarCodApartamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCodApartamentoActionPerformed(evt);
@@ -1480,6 +1512,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 130, -1, -1));
 
         txtBlocoApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtBlocoApartamento.setToolTipText("Bloco do apartamento.");
         painelApartamento.add(txtBlocoApartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, 190, -1));
 
         jLabel77.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1487,6 +1520,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 130, -1, -1));
 
         txtNumeroApartamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNumeroApartamento.setToolTipText("Número do apartamento.");
         painelApartamento.add(txtNumeroApartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 130, 170, -1));
 
         jLabel78.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1494,6 +1528,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel78, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         txtEstacionamento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEstacionamento1.setToolTipText("Vaga 1 de estacionamento do apartamento (não editável).");
         painelApartamento.add(txtEstacionamento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 130, -1));
 
         jLabel79.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1501,6 +1536,7 @@ public class Principal extends javax.swing.JFrame {
         painelApartamento.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, -1, -1));
 
         txtEstacionamento2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtEstacionamento2.setToolTipText("Vaga 2 de estacionamento do apartamento (não editável).");
         painelApartamento.add(txtEstacionamento2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 130, -1));
 
         jLabel89.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1559,10 +1595,12 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtPlacaVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPlacaVeiculo.setToolTipText("Digite a placa do veículo.");
         painelVeiculo.add(txtPlacaVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 110, -1));
 
         btnLocalizarPlacaVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarPlacaVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarPlacaVeiculo.setToolTipText("Clique aqui para consultar a placa do veículo.");
         btnLocalizarPlacaVeiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarPlacaVeiculoActionPerformed(evt);
@@ -1606,6 +1644,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel81, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, -1, -1));
 
         txtModeloVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtModeloVeiculo.setToolTipText("Digite o modelo do veículo.");
         painelVeiculo.add(txtModeloVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 160, -1));
 
         jLabel82.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1613,6 +1652,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 120, -1, -1));
 
         txtFabricanteVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtFabricanteVeiculo.setToolTipText("Digite o fabricante do veículo.");
         painelVeiculo.add(txtFabricanteVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 120, 170, -1));
 
         jLabel83.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1620,6 +1660,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel83, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 120, -1, -1));
 
         txtCorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCorVeiculo.setToolTipText("informe a cor do veículo.");
         painelVeiculo.add(txtCorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 120, 130, -1));
 
         jLabel84.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1627,6 +1668,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel84, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         txtCpfMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCpfMoradorVeiculo.setToolTipText("Digite o CPF do responsável pelo veículo.");
         painelVeiculo.add(txtCpfMoradorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 130, -1));
 
         jLabel85.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1634,6 +1676,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel85, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 170, -1, -1));
 
         txtNomeMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeMoradorVeiculo.setToolTipText("Nome do morador (não editável).");
         painelVeiculo.add(txtNomeMoradorVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 450, -1));
 
         jLabel86.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1641,6 +1684,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel86, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 330, -1));
 
         txtBlocoApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtBlocoApartamentoVeiculo.setToolTipText("Bloco do apartamento do morador (não editável).");
         painelVeiculo.add(txtBlocoApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 130, -1));
 
         jLabel87.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1648,6 +1692,7 @@ public class Principal extends javax.swing.JFrame {
         painelVeiculo.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, -1, -1));
 
         txtNumeroApartamentoVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNumeroApartamentoVeiculo.setToolTipText("Nímero do apartamento do morador (não editável).");
         painelVeiculo.add(txtNumeroApartamentoVeiculo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, 130, -1));
 
         jLabel88.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1656,6 +1701,7 @@ public class Principal extends javax.swing.JFrame {
 
         btnLocalizarCpfMoradorVeiculo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocalizarCpfMoradorVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/localizar2_d.png"))); // NOI18N
+        btnLocalizarCpfMoradorVeiculo.setToolTipText("Clique aqui para consultar o morador pelo CPF.");
         btnLocalizarCpfMoradorVeiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocalizarCpfMoradorVeiculoActionPerformed(evt);
@@ -2291,6 +2337,12 @@ public class Principal extends javax.swing.JFrame {
         statusAlterarMorador(true);
         String cpf = txtCpfMorador.getText();
         morador = dadosCondominio.consultaCpfMorador(cpf);
+        System.out.println("morador ----> " + morador.getCpfMorador());
+        System.out.println("morador ----> " + morador.getNomeMorador());
+        System.out.println("morador ----> " + morador.getEmailMorador());
+        System.out.println("morador ----> " + morador.getTelefoneMorador());
+        System.out.println("morador ----> " + morador.getAtivoMorador());
+        System.out.println("morador ----> " + morador.getCodigoApartamento());
 
         if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
             if (morador != null) {
@@ -2799,9 +2851,13 @@ public class Principal extends javax.swing.JFrame {
             radioNaoMorador.setSelected(true);
         }
 
-        Apartamento apart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoMorador());
-
+        Apartamento apart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
+        
+        System.out.println("morador cod Apart ----> " + morador.getCodigoApartamento());
+        
         if (apart != null) {
+            System.out.println("apart bloco ----> " + apart.getBlocoApartamento());
+            System.out.println("apart numero ----> " + apart.getNumeroApartamento());
             txtBlocoApartamentoMorador.setText(apart.getBlocoApartamento());
             txtNumeroApartamentoMorador.setText(apart.getNumeroApartamento());
         }
@@ -2961,7 +3017,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnLocalizarCpfMoradorVeiculo;
     private javax.swing.JButton btnLocalizarCpfMoradorVisita;
     private javax.swing.JButton btnLocalizarCpfVisitante;
-    private javax.swing.JButton btnLocalizarNomeVisitante;
     private javax.swing.JButton btnLocalizarPlacaVeiculo;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnSair;

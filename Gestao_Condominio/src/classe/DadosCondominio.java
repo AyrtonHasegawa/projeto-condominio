@@ -340,6 +340,7 @@ public class DadosCondominio {
     
     public Apartamento consultaCodigoApartamento(int codigoApartamento) {
         sql = "SELECT * FROM tb_apartamento WHERE Ap_Cod_Apartamento = ?";
+        System.out.println("codigoApartamento consulta cod ----> " + codigoApartamento);
         
         try {
             psCondominio = conCondominio.prepareStatement(sql);
@@ -348,6 +349,7 @@ public class DadosCondominio {
             
             if(rsCondominio.next()) {
                 apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
+                System.out.println("setCodigoAparatamento ----> " + rsCondominio.getInt("Ap_Cod_Apartamento"));
                 apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
                 apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
                 apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
