@@ -15,7 +15,7 @@ public class ConectaBD {
     public String setConecta()
     {
         driver = "com.mysql.jdbc.Driver";
-        endBanco = "jdbc:mysql://localhost/gestao_con";
+        endBanco = /*"jdbc:mysql://localhost/gestao_con"*/ "jdbc:mysql://localhost/teste_condominio";
         usuarioBanco = "root";
         senhaBanco = "";
         

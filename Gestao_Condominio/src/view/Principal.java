@@ -1813,7 +1813,7 @@ public class Principal extends javax.swing.JFrame {
                                     JOptionPane.showMessageDialog(this, msg, "Incluir Funcionário", JOptionPane.INFORMATION_MESSAGE);
                                     limparFuncionario();
                                     statusInicioFuncionario(true);
-                                    exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+                                    exibeGridGeral();
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario),
@@ -1853,7 +1853,7 @@ public class Principal extends javax.swing.JFrame {
 
                                     limparFuncionario();
                                     statusInicioFuncionario(true);
-                                    exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+                                    exibeGridGeral();
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(this, funcionario.validaTelefone(funcionario),
@@ -1932,7 +1932,7 @@ public class Principal extends javax.swing.JFrame {
                                         JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
                                         limparMorador();
                                         statusInicioMorador(true);
-                                        exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                        exibeGridGeral();
                                     }
 
                                     //--------------------------Alterar Morador------------------------
@@ -1955,7 +1955,7 @@ public class Principal extends javax.swing.JFrame {
 
                                         limparMorador();
                                         statusInicioMorador(true);
-                                        exibeGridMorador(dadosCondominio.consultaGeralMorador());
+                                        exibeGridGeral();
                                     }
                                 }
                             } else {
@@ -2016,7 +2016,7 @@ public class Principal extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, msg, "Incluir Visita no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
                     limparVisita();
                     statusInicioVisita(true);
-                    exibeGridVisita(dadosCondominio.consultaGeralVisita());
+                    exibeGridGeral();
                 }
                 
 //--------------------------Alterar Visita------------------------                
@@ -2028,7 +2028,7 @@ public class Principal extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, msg, "Alterar Visita no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
                     limparVisita();
                     statusInicioVisita(true);
-                    exibeGridVisita(dadosCondominio.consultaGeralVisita());
+                    exibeGridGeral();
                 }
             }
             
@@ -2061,7 +2061,7 @@ public class Principal extends javax.swing.JFrame {
                     msg = dadosCondominio.alteraVisitante(visitante, cpfAntigo);
                     JOptionPane.showMessageDialog(this, msg, "Alterar Visitante no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
                     limparVisitante();
-                    exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
+                    exibeGridGeral();
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
@@ -2112,7 +2112,7 @@ public class Principal extends javax.swing.JFrame {
                                 JOptionPane.showMessageDialog(this, msg, "Incluir Apartamento", JOptionPane.INFORMATION_MESSAGE);
                                 limparApartamento();
                                 statusInicioApartamento(true);
-                                exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                                exibeGridGeral();
                             }
                         } else {
                             JOptionPane.showMessageDialog(this, "Digite outro número para o bloco do apartamento",
@@ -2132,7 +2132,7 @@ public class Principal extends javax.swing.JFrame {
 
                             limparApartamento();
                             statusInicioApartamento(true);
-                            exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                            exibeGridGeral();
                         }
                     }
                 } else {
@@ -2193,7 +2193,7 @@ public class Principal extends javax.swing.JFrame {
                                         JOptionPane.showMessageDialog(this, msg, "Incluir Veiculo", JOptionPane.INFORMATION_MESSAGE);
                                         limparVeiculo();
                                         statusInicioVeiculo(true);
-                                        exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+                                        exibeGridGeral();
                                     }
 
                                     //--------------------------Alterar Morador------------------------
@@ -2206,7 +2206,7 @@ public class Principal extends javax.swing.JFrame {
 
                                         limparVeiculo();
                                         statusInicioVeiculo(true);
-                                        exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+                                        exibeGridGeral();
                                     }
                                 }
 
@@ -2303,7 +2303,7 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION) == 0) {
             String codigo = txtCodFun.getText();
             dadosCondominio.excluiFuncionario(codigo);
-            exibeGridFuncionario(dadosCondominio.consultaGeralFuncionario());
+            exibeGridGeral();
             limparFuncionario();
         }
     }//GEN-LAST:event_btnExcluirFunActionPerformed
@@ -2461,13 +2461,13 @@ public class Principal extends javax.swing.JFrame {
                     exibeGridGeral();
                 }
             } else {
-                if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o apartamento "
+                if (JOptionPane.showConfirmDialog(this, "Todos os moradores desse apartamento serão excluídos. \n Deseja realmente excluir o apartamento "
                         + txtNumeroApartamento.getText() + " do bloco " + txtBlocoApartamento.getText()
-                        + " do banco de dados?", "Excluir Funcionário",
+                        + "\n do banco de dados?", "Excluir Apartamento",
                         JOptionPane.YES_NO_OPTION) == 0) {
                     String codigo = txtCodApartamento.getText();
                     dadosCondominio.excluiApartamento(codigo);
-                    exibeGridApartamento(dadosCondominio.consultaGeralApartamento());
+                    exibeGridGeral();
                     limparApartamento();
                 }
             }
@@ -2510,7 +2510,7 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
             excluiMorador(morador);
-            exibeGridMorador(dadosCondominio.consultaGeralMorador());
+            exibeGridGeral();
         }
 
     }//GEN-LAST:event_btnExcluirMoradorActionPerformed
@@ -2584,7 +2584,7 @@ public class Principal extends javax.swing.JFrame {
 
         if (!listVisita.isEmpty()) {
             excluiVisitante(txtCpfVisitante.getText());
-            exibeGridVisitante(rsCondominioVisitante);
+            exibeGridGeral();
             for (Visita vis : listVisita) {
                 dadosCondominio.excluiVisita(vis.getCodVisita());
             }
@@ -2645,7 +2645,7 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION) == 0) {
             String placa = txtPlacaVeiculo.getText();
             dadosCondominio.excluiVeiculo(placa);
-            exibeGridVeiculo(dadosCondominio.consultaGeralVeiculo());
+            exibeGridGeral();
             limparVeiculo();
         }
     }//GEN-LAST:event_btnExcluirVeiculoActionPerformed
@@ -2684,7 +2684,7 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION) == 0) {
             int codigo = visita.getCodVisita();
             dadosCondominio.excluiVisita(codigo);
-            exibeGridVisita(dadosCondominio.consultaGeralVisita());
+            exibeGridGeral();
             limparVisita();
         }
     }//GEN-LAST:event_btnExcluirVisitaActionPerformed
@@ -2874,7 +2874,7 @@ public class Principal extends javax.swing.JFrame {
                 + morador.getNomeMorador() + " do banco de dados?", "Excluir Morador",
                 JOptionPane.YES_NO_OPTION) == 0) {
             dadosCondominio.excluiMorador(morador.getCpfMorador());
-            exibeGridMorador(dadosCondominio.consultaGeralMorador());
+            exibeGridGeral();
             limparMorador();
         }
     }
@@ -2931,7 +2931,7 @@ public class Principal extends javax.swing.JFrame {
                 + txtNomeVisitante.getText() + " do banco de dados?", "Excluir Morador",
                 JOptionPane.YES_NO_OPTION) == 0) {
             dadosCondominio.excluiVisitante(cpfVisitante);
-            exibeGridVisitante(dadosCondominio.consultaGeralVisitante());
+            exibeGridGeral();
             limparVisitante();
         }
     }
