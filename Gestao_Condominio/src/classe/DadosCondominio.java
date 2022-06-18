@@ -6,13 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -112,8 +109,22 @@ public class DadosCondominio {
         } else {
             valida = true;
         }
-
         return valida;
+    }
+    
+    public String validaEmail(String email) {
+        String msg;
+        String regx = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regx);
+        
+        Matcher matcher = pattern.matcher(email);
+        
+        if(matcher.matches()) {
+            msg = "Ok";
+        } else {
+            msg = "Email inválido!";
+        }
+        return msg;
     }
 
     //-------------- Novo Funcionario Aprovado-----------------
@@ -340,7 +351,6 @@ public class DadosCondominio {
     
     public Apartamento consultaCodigoApartamento(int codigoApartamento) {
         sql = "SELECT * FROM tb_apartamento WHERE Ap_Cod_Apartamento = ?";
-        System.out.println("codigoApartamento consulta cod ----> " + codigoApartamento);
         
         try {
             psCondominio = conCondominio.prepareStatement(sql);
@@ -349,7 +359,6 @@ public class DadosCondominio {
             
             if(rsCondominio.next()) {
                 apartamento.setCodigoAparatamento(rsCondominio.getInt("Ap_Cod_Apartamento"));
-                System.out.println("setCodigoAparatamento ----> " + rsCondominio.getInt("Ap_Cod_Apartamento"));
                 apartamento.setNumeroApartamento(rsCondominio.getString("Ap_Num_Apartamento"));
                 apartamento.setBlocoApartamento(rsCondominio.getString("Ap_Bloco_Predio"));
                 apartamento.setVagaApartamento_1(rsCondominio.getString("Ap_Num_Vaga1"));
@@ -477,7 +486,6 @@ public class DadosCondominio {
     }
 
     public String alteraMorador(Morador morador, String cpfAntigo) {
-        System.out.println("");
         sql = "UPDATE tb_morador SET Mor_CPF = ?, Mor_Nome = ?, Mor_Email = ?,"
                 + " Mor_Telefone = ?, Mor_Ativo = ?, Mor_Cod_Apartamento = ?"
                 + " WHERE Mor_CPF = ?";
@@ -491,7 +499,6 @@ public class DadosCondominio {
             psCondominio.setString(5, morador.getAtivoMorador());
             psCondominio.setInt(6, morador.getCodigoApartamento());
             
-            System.out.println("morador.getCpfMorador() ----> " + morador.getCpfMorador());
             psCondominio.executeUpdate();
             msg = "Dados do Morador alterado com sucesso!";
             
@@ -593,9 +600,7 @@ public class DadosCondominio {
         try {
             psCondominio = conCondominio.prepareStatement(sql);
             psCondominio.setString(1, visita.getData());
-            System.out.println("setDate ----> " + visita.getData());
             psCondominio.setString(2, visita.getHora());
-            System.out.println("setTime ----> " + visita.getHora());
             psCondominio.setString(3, visita.getCpfMoradorVisita());
             psCondominio.setString(4, visita.getCpfVisitanteVisita());
 
@@ -893,9 +898,6 @@ public class DadosCondominio {
                 veiculo.setFabricante(rsCondominio.getString("Vei_Fabricante"));
                 veiculo.setCor(rsCondominio.getString("Vei_Cor"));
                 veiculo.setCpfMorador(rsCondominio.getString("Vei_CPF_Morador"));
-                //veiculo.setNomeMorador(retornaMorador.getNomeMorador());
-                //veiculo.setBlocoApartamento(retornaApartamento.getBlocoApartamento());
-                //veiculo.setNumeroApartamento(retornaApartamento.getNumeroApartamento());
                 veiculo.setCodigoApartamento(rsCondominio.getInt("Vei_Cod_Apartamento"));
                 
                 return veiculo;

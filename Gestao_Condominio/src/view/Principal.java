@@ -14,15 +14,11 @@ import classe.Visita;
 import classe.Visitante;
 import classe.Veiculo;
 import classe.FuncionarioAtual;
-import view.Login;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -53,7 +49,6 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();
-        System.out.println("funcionario login principal ----> " + funcionarioAtual.getNome());
         lblMsg.setText(dadosCondominio.getCon());
         lblNome_Fun.setText(funcionarioAtual.getNome());
         exibeGridGeral();
@@ -1837,7 +1832,6 @@ public class Principal extends javax.swing.JFrame {
                 setFuncionario();
                 funcionario.setCod_Fun(Integer.parseInt(txtCodFun.getText()));
                 int codFun = funcionario.getCod_Fun();
-                //int codFunE = funcionarioExistente.getCod_Fun();
 
                 //-----------------Verifica CPF--------------                
                 if (funcionarioExistente == null || funcionarioExistente.getCod_Fun()
@@ -1922,46 +1916,52 @@ public class Principal extends javax.swing.JFrame {
                 if (existeApartamento != null) {
                     if (verificaNumeroCpf.equals("Numero")) {
                         if (cpfValido.equals("Ok")) {
-                            if (dadosCondominio.validaNome(morador.getNomeMorador())) {
+                            
+                            if(dadosCondominio.validaEmail(morador.getEmailMorador()).equals("Ok")) {
+                                if (dadosCondominio.validaNome(morador.getNomeMorador())) {
 
-                                //--------------------------Inserir Morador------------------------
-                                if (salvar.equals("Incluir")) {
-                                    if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Morador?",
-                                            "Incluir Morador", JOptionPane.YES_NO_OPTION) == 0) {
-                                        msg = dadosCondominio.insereMorador(morador, existeApartamento.getCodigoApartamento());
-                                        JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
-                                        limparMorador();
-                                        statusInicioMorador(true);
-                                        exibeGridGeral();
-                                    }
-
-                                    //--------------------------Alterar Morador------------------------
-                                } else if (salvar.equals("Alterar")) {
-                                    if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Morador?",
-                                            "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                    //--------------------------Inserir Morador------------------------
+                                    if (salvar.equals("Incluir")) {
                                         
-                                        System.out.println("cpfAntigo ----> " + cpfAntigo);
-                                        setMorador(existeApartamento.getCodigoApartamento());
-                                        System.out.println("cpf novo ----> " + morador.getCpfMorador());
-                                        System.out.println("setMorador getCpfMorador ----> " + morador.getCpfMorador());
-                                        System.out.println("setMorador getNomeMorador ----> " + morador.getNomeMorador());
-                                        System.out.println("setMorador getEmailMorador ----> " + morador.getEmailMorador());
-                                        System.out.println("setMorador getTelefoneMorador ----> " + morador.getTelefoneMorador());
-                                        System.out.println("setMorador getAtivoMorador ----> " + morador.getAtivoMorador());
-                                        System.out.println("setMorador getCodigoApartamento----> " + morador.getCodigoApartamento());
-                                        System.out.println("existeApartamento.getCodigoApartamento()----> " + existeApartamento.getCodigoApartamento());
-                                        msg = dadosCondominio.alteraMorador(morador, cpfAntigo);
-                                        JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+                                        if(dadosCondominio.consultaCpfMorador(morador.getCpfMorador()) == null) {
+                                            if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Morador?",
+                                                    "Incluir Morador", JOptionPane.YES_NO_OPTION) == 0) {
+                                                msg = dadosCondominio.insereMorador(morador, existeApartamento.getCodigoApartamento());
+                                                JOptionPane.showMessageDialog(this, msg, "Incluir Morador", JOptionPane.INFORMATION_MESSAGE);
+                                                limparMorador();
+                                                statusInicioMorador(true);
+                                                exibeGridGeral();
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "Digite outro CPF.",
+                                            "CPF já cadastrado", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                        
+                                        
 
-                                        limparMorador();
-                                        statusInicioMorador(true);
-                                        exibeGridGeral();
+                                        //--------------------------Alterar Morador------------------------
+                                    } else if (salvar.equals("Alterar")) {
+                                        if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Morador?",
+                                                "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+
+                                            setMorador(existeApartamento.getCodigoApartamento());
+                                            msg = dadosCondominio.alteraMorador(morador, cpfAntigo);
+                                            JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                            limparMorador();
+                                            statusInicioMorador(true);
+                                            exibeGridGeral();
+                                        }
                                     }
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
+                                            "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
                                 }
                             } else {
-                                JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
-                                        "Nome Incorreto", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Digite corretamente o email.",
+                                    "Email Inválido", JOptionPane.ERROR_MESSAGE);
                             }
+                            
                         } else {
                             JOptionPane.showMessageDialog(this, cpfValido,
                                     "CPF Incorreto", JOptionPane.ERROR_MESSAGE);
@@ -2005,8 +2005,8 @@ public class Principal extends javax.swing.JFrame {
         setVisita();
         String msg;
         
-        if(!txtCpfVisitanteVisita.getText().equals("") || !txtNomeVisitanteVisita.getText().equals("") || 
-                !txtCpfMoradorVisita.getText().equals("") || !txtNomeMoradorVisita.getText().equals("")) {
+        if(!txtCpfVisitanteVisita.getText().equals("") && !txtNomeVisitanteVisita.getText().equals("") && 
+                !txtCpfMoradorVisita.getText().equals("") && !txtNomeMoradorVisita.getText().equals("")) {
             
 //--------------------------Inserir Visita------------------------             
             if(salvar.equals("Incluir")) {
@@ -2048,7 +2048,6 @@ public class Principal extends javax.swing.JFrame {
 
         setVisitante();
         String msg;
-        System.out.println("cpfAntigo ----> " + cpfAntigo);
         String cpf = txtCpfVisitante.getText();
         String statusCampoVazio = visitante.verificaCampoVazio(visitante);
 
@@ -2057,7 +2056,6 @@ public class Principal extends javax.swing.JFrame {
                 if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Visitante?",
                         "Alterar Visitante", JOptionPane.YES_NO_OPTION) == 0) {
                     setVisitante();
-                    System.out.println("visitante.getCpfVisitante() ----> " + visitante.getCpfVisitante());
                     msg = dadosCondominio.alteraVisitante(visitante, cpfAntigo);
                     JOptionPane.showMessageDialog(this, msg, "Alterar Visitante no Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
                     limparVisitante();
@@ -2182,7 +2180,6 @@ public class Principal extends javax.swing.JFrame {
                     if (verificaNumeroCpf.equals("Numero")) {
                         if (dadosCondominio.validaNome(morador.getNomeMorador()) == true) {
                             int vaga = dadosCondominio.consultaVagaVeiculo(veiculo);
-                            System.out.println("vaga ----> " + vaga);
 
                             if (vaga < 2) {
                                 //--------------------------Inserir Morador------------------------
@@ -2242,7 +2239,6 @@ public class Principal extends javax.swing.JFrame {
 
         salvar = "Alterar";
         statusConsultarFuncionario(true);
-        System.out.println("valida ----> " + dadosCondominio.validaNumero(txtCodFun.getText(), 10));
 
         if (dadosCondominio.validaNumero(txtCodFun.getText(), 10) == "Numero") {
             funcionario = dadosCondominio.consultaCodigoFuncionario(Integer.parseInt(txtCodFun.getText()));
@@ -2289,7 +2285,6 @@ public class Principal extends javax.swing.JFrame {
         salvar = "Alterar";
         statusAlterarFuncionario(true);
         int posicao = jTableFuncionario.getSelectedRow();
-        String ativo = (String) jTableFuncionario.getValueAt(posicao, 6);
         funcionario = dadosCondominio.consultaCpfFuncionario(String.valueOf(jTableFuncionario.getValueAt(posicao, 1)));
         getFuncionario();
         exibeGridGeral();
@@ -2323,7 +2318,6 @@ public class Principal extends javax.swing.JFrame {
             } else {
                 getApartamento();
                 statusAlterarApartamento(true);
-                System.out.println("2" + apartamento.getCodigoApartamento());
             }
         } else {
             JOptionPane.showMessageDialog(this, "Digite apenas número!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -2337,14 +2331,8 @@ public class Principal extends javax.swing.JFrame {
         statusAlterarMorador(true);
         String cpf = txtCpfMorador.getText();
         morador = dadosCondominio.consultaCpfMorador(cpf);
-        System.out.println("morador ----> " + morador.getCpfMorador());
-        System.out.println("morador ----> " + morador.getNomeMorador());
-        System.out.println("morador ----> " + morador.getEmailMorador());
-        System.out.println("morador ----> " + morador.getTelefoneMorador());
-        System.out.println("morador ----> " + morador.getAtivoMorador());
-        System.out.println("morador ----> " + morador.getCodigoApartamento());
 
-        if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+        if (dadosCondominio.validaCpf(cpf).equals("Ok") || !txtCpfMorador.getText().isEmpty()) {
             if (morador != null) {
                 getMorador(morador);
                 statusAlterarMorador(true);
@@ -2373,8 +2361,6 @@ public class Principal extends javax.swing.JFrame {
                 if (dadosCondominio.validaCpf(txtCpfVisitanteVisita.getText()).equals("Ok")) {
                     Visitante recebeVisitante = dadosCondominio.consultaCpfVisitante(cpfVisitante);
                     if (recebeVisitante == null) {
-                        
-
                         String nomeVisitante = JOptionPane.showInputDialog(null, "Digite o nome do Visitante", "Cadastrar Visitante", JOptionPane.INFORMATION_MESSAGE);
                         
                         if(nomeVisitante != null) {
@@ -2397,17 +2383,12 @@ public class Principal extends javax.swing.JFrame {
                                 JOptionPane.showMessageDialog(this, "Visitante não cadastrdado.");
                             }
                         }
-                        
-                        
                     } else {
                         if (recebeVisitante != null) {
                             JOptionPane.showMessageDialog(this, "Visitante já cadastrado", "Visitante já cadastrado", JOptionPane.INFORMATION_MESSAGE);
                             txtNomeVisitanteVisita.setText(dadosCondominio.consultaCpfVisitante(cpfVisitante).getNomeVisitante());
                         }
-
                     }
-
-                    //-->
                 } else {
                     JOptionPane.showMessageDialog(this, "Um CPF válido comtém 11 dígitos", "CPF inválido",
                             JOptionPane.ERROR_MESSAGE);
@@ -2484,7 +2465,6 @@ public class Principal extends javax.swing.JFrame {
         statusAlterarMorador(true);
         int posicao = jTableMorador.getSelectedRow();
         morador = dadosCondominio.consultaCpfMorador(String.valueOf(jTableMorador.getValueAt(posicao, 0)));
-        System.out.println("cpf morador ----> " + morador.getCpfMorador());
         cpfAntigo = morador.getCpfMorador();
         Apartamento pegaApart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
         txtBlocoApartamentoMorador.setText(pegaApart.getBlocoApartamento());
@@ -2542,7 +2522,6 @@ public class Principal extends javax.swing.JFrame {
             limparVisitante();
             JOptionPane.showMessageDialog(this, "Digite apenas números com 11 dígitos, sem ponto", "CPF inválido",
                     JOptionPane.ERROR_MESSAGE);
-
         }
     }//GEN-LAST:event_btnLocalizarCpfVisitanteActionPerformed
 
@@ -2572,10 +2551,6 @@ public class Principal extends javax.swing.JFrame {
         visita = dadosCondominio.consultaCodigoVisita(Integer.parseInt(jTableHistoricoVisita.getValueAt(posicao, 0).toString()));
         getVisita(visita);
         exibeGridGeral();
-
-        System.out.println("visita cod " + visita.getCodVisita());
-        System.out.println("visitante" + visita.getCpfMoradorVisita());
-        System.out.println("morador " + visita.getCpfVisitanteVisita());
     }//GEN-LAST:event_jTableHistoricoVisitaMouseClicked
 
     private void btnExcluirVisitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitanteActionPerformed
@@ -2620,9 +2595,9 @@ public class Principal extends javax.swing.JFrame {
     private void btnLocalizarCpfMoradorVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarCpfMoradorVeiculoActionPerformed
         String cpf = txtCpfMoradorVeiculo.getText();
         morador = dadosCondominio.consultaCpfMorador(cpf);
-        apartamento = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
 
         if (dadosCondominio.validaCpf(cpf).equals("Ok")) {
+            apartamento = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
             if (morador != null) {
                 txtNomeMoradorVeiculo.setText(morador.getNomeMorador());
                 txtBlocoApartamentoVeiculo.setText(apartamento.getBlocoApartamento());
@@ -2666,16 +2641,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableVeiculoMouseClicked
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        /*
-        exibeGridFuncionario(rsCondominioFuncionario);
-        exibeGridApartamento(rsCondominioApartamento);
-        exibeGridMorador(rsCondominioMorador);
-        exibeGridVisita(rsCondominioVisita);
-        exibeGridVisitante(rsCondominioVisitante);
-        exibeGridVeiculo(rsCondominioVeiculo);
-        txtDataVisita.setText(getData("data"));
-        txtHoraVisita.setText(getData("hora"));
-         */
+        
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void btnExcluirVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirVisitaActionPerformed
@@ -2693,14 +2659,6 @@ public class Principal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-
-         */
         try {
 
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -2788,8 +2746,6 @@ public class Principal extends javax.swing.JFrame {
         apartamento.setBlocoApartamento(txtBlocoApartamento.getText());
         apartamento.setVagaApartamento_1(txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "1");
         apartamento.setVagaApartamento_2(txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "2");
-        System.out.println("setVagaApartamento_1 ----> " + txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "1");
-        System.out.println("setVagaApartamento_2 ----> " + txtBlocoApartamento.getText() + txtNumeroApartamento.getText() + "2");
     }
 
     private void getApartamento() {
@@ -2853,11 +2809,7 @@ public class Principal extends javax.swing.JFrame {
 
         Apartamento apart = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
         
-        System.out.println("morador cod Apart ----> " + morador.getCodigoApartamento());
-        
         if (apart != null) {
-            System.out.println("apart bloco ----> " + apart.getBlocoApartamento());
-            System.out.println("apart numero ----> " + apart.getNumeroApartamento());
             txtBlocoApartamentoMorador.setText(apart.getBlocoApartamento());
             txtNumeroApartamentoMorador.setText(apart.getNumeroApartamento());
         }
@@ -2902,10 +2854,6 @@ public class Principal extends javax.swing.JFrame {
 
         txtDataVisita.setText(visita.getData());
         txtHoraVisita.setText(visita.getHora());
-
-        System.out.println("visita cod " + visita.getCodVisita());
-        System.out.println("visitante" + visitante.getCpfVisitante());
-        System.out.println("morador " + morador.getCpfMorador());
     }
     
     private boolean verificaCampoVazioVisita() {
@@ -2939,7 +2887,6 @@ public class Principal extends javax.swing.JFrame {
     public void preencheVisitanteVisita(Visitante visitante) {
         txtNomeVisitanteVisita.setText(visitante.getNomeVisitante());
         exibeGridGeral();
-        System.out.println("preencheVisitanteVisita ----> " + visitante.getNomeVisitante());
     }
 
     //---------------Método do Veiculo---------------

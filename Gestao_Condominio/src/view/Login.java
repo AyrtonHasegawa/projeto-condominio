@@ -152,7 +152,6 @@ public class Login extends javax.swing.JFrame {
                     
                     fun.setNome(usuarioAtual);
                     principal.setVisible(true);
-                    System.out.println("funcionario Login ----> " + fun.getNome());
                     this.dispose();
                 }else{
                     JOptionPane.showMessageDialog(this, "Por favor, digite o login e senha", 
