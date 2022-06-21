@@ -2179,38 +2179,54 @@ public class Principal extends javax.swing.JFrame {
                 if (cpfValido.equals("Ok")) {
                     if (verificaNumeroCpf.equals("Numero")) {
                         if (dadosCondominio.validaNome(morador.getNomeMorador()) == true) {
-                            int vaga = dadosCondominio.consultaVagaVeiculo(veiculo);
+                            msg = Veiculo.validaPlaca(veiculo.getPlaca());
+                            
+                            if(msg == "Ok") {
+                                int vaga = dadosCondominio.consultaVagaVeiculo(veiculo);
 
-                            if (vaga < 2) {
-                                //--------------------------Inserir Morador------------------------
-                                if (salvar.equals("Incluir")) {
-                                    if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Veículo?",
-                                            "Incluir Veiculo", JOptionPane.YES_NO_OPTION) == 0) {
-                                        msg = dadosCondominio.insereVeiculo(veiculo);
-                                        JOptionPane.showMessageDialog(this, msg, "Incluir Veiculo", JOptionPane.INFORMATION_MESSAGE);
-                                        limparVeiculo();
-                                        statusInicioVeiculo(true);
-                                        exibeGridGeral();
+                                if (vaga < 2) {
+                                    //--------------------------Inserir Morador------------------------
+                                    if (salvar.equals("Incluir")) {
+                                        
+                                        if (JOptionPane.showConfirmDialog(this, "Deseja incluir o Veículo?",
+                                                "Incluir Veiculo", JOptionPane.YES_NO_OPTION) == 0) {
+                                            msg = dadosCondominio.insereVeiculo(veiculo);
+                                            JOptionPane.showMessageDialog(this, msg, "Incluir Veiculo", JOptionPane.INFORMATION_MESSAGE);
+                                            limparVeiculo();
+                                            statusInicioVeiculo(true);
+                                            exibeGridGeral();
+                                        }
+
+                                        //--------------------------Alterar Morador------------------------
+                                    } else if (salvar.equals("Alterar")) {
+                                        if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Veículo?",
+                                                "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                            setVeiculo();
+                                            msg = dadosCondominio.alteraVeiculo(veiculo);
+                                            JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
+
+                                            limparVeiculo();
+                                            statusInicioVeiculo(true);
+                                            exibeGridGeral();
+                                        }
                                     }
+                                } else if (salvar.equals("Incluir")){
+                                    JOptionPane.showMessageDialog(this, "Não há vaga de estacionamento no apartamento do bloco "
+                                            + apartamento.getBlocoApartamento() + " Número "
+                                            + apartamento.getNumeroApartamento(), "Sem vaga de estacionamento", JOptionPane.ERROR_MESSAGE);
+                                } else if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Veículo?",
+                                                "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
+                                            setVeiculo();
+                                            msg = dadosCondominio.alteraVeiculo(veiculo);
+                                            JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
 
-                                    //--------------------------Alterar Morador------------------------
-                                } else if (salvar.equals("Alterar")) {
-                                    if (JOptionPane.showConfirmDialog(this, "Deseja alterar os dados do Veículo?",
-                                            "Alterar dados", JOptionPane.YES_NO_OPTION) == 0) {
-                                        setVeiculo();
-                                        msg = dadosCondominio.alteraVeiculo(veiculo);
-                                        JOptionPane.showMessageDialog(this, msg, "Alterar dados", JOptionPane.INFORMATION_MESSAGE);
-
-                                        limparVeiculo();
-                                        statusInicioVeiculo(true);
-                                        exibeGridGeral();
-                                    }
-                                }
-
+                                            limparVeiculo();
+                                            statusInicioVeiculo(true);
+                                            exibeGridGeral();
+                                        }
                             } else {
-                                JOptionPane.showMessageDialog(this, "Não há vaga de estacionamento no apartamento do bloco "
-                                        + apartamento.getBlocoApartamento() + " Número "
-                                        + apartamento.getNumeroApartamento(), "Sem vaga de estacionamento", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, msg,
+                                    "Placa do Veículo Incorreto", JOptionPane.ERROR_MESSAGE);
                             }
                         } else {
                             JOptionPane.showMessageDialog(this, "Digite corretamente o nome.",
@@ -2241,13 +2257,29 @@ public class Principal extends javax.swing.JFrame {
         statusConsultarFuncionario(true);
 
         if (dadosCondominio.validaNumero(txtCodFun.getText(), 10) == "Numero") {
-            funcionario = dadosCondominio.consultaCodigoFuncionario(Integer.parseInt(txtCodFun.getText()));
-            if (funcionario == null) {
+            Funcionario consultaFuncionario = dadosCondominio.consultaCodigoFuncionario(Integer.parseInt(txtCodFun.getText()));
+            if (consultaFuncionario == null) {
                 JOptionPane.showMessageDialog(this, "Código não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                 statusInicioFuncionario(true);
                 limparFuncionario();
             } else {
-                getFuncionario();
+                //getFuncionario();
+                txtCodFun.setText(String.valueOf(consultaFuncionario.getCod_Fun()));
+                txtCpfFun.setText(consultaFuncionario.getCpf());
+                txtNomeFun.setText(consultaFuncionario.getNome());
+                txtCargoFun.setText(consultaFuncionario.getCargo());
+                txtTelefoneFun.setText(consultaFuncionario.getTelefone());
+                txtEnderecoFun.setText(consultaFuncionario.getEndereco());
+                String ativo = consultaFuncionario.getAtivo();
+                txtLoginFun.setText(consultaFuncionario.getLogin());
+                txtSenhaFun.setText(consultaFuncionario.getSenha());
+
+                if (ativo.equals("Sim")) {
+                    radioSimFun.setSelected(true);
+                } else if (ativo.equals("Nao")) {
+                    radioNaoFun.setSelected(true);
+                }
+                
                 statusAlterarFuncionario(true);
             }
         } else {
@@ -2268,8 +2300,8 @@ public class Principal extends javax.swing.JFrame {
         salvar = "Alterar";
         statusAlterarFuncionario(true);
         String cpf = txtCpfFun.getText();
-        funcionario = dadosCondominio.consultaCpfFuncionario(cpf);
-        if (funcionario == null) {
+        Funcionario consultaFuncionario = dadosCondominio.consultaCpfFuncionario(cpf);
+        if (consultaFuncionario == null) {
             JOptionPane.showMessageDialog(this, "Funcionário não encontrado", "CPF não cadastrado",
                     JOptionPane.ERROR_MESSAGE);
             statusInicioFuncionario(true);
@@ -2310,13 +2342,18 @@ public class Principal extends javax.swing.JFrame {
         String codApart = dadosCondominio.validaNumero(txtCodApartamento.getText(), 10);
 
         if (codApart == "Numero") {
-            apartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(txtCodApartamento.getText()));
-            if (apartamento == null) {
+            Apartamento consultaApartamento = dadosCondominio.consultaCodigoApartamento(Integer.parseInt(txtCodApartamento.getText()));
+            if (consultaApartamento == null) {
                 JOptionPane.showMessageDialog(this, "Código não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                 statusInicioApartamento(true);
                 limparApartamento();
             } else {
-                getApartamento();
+                //getApartamento();
+                txtCodApartamento.setText(String.valueOf(consultaApartamento.getCodigoApartamento()));
+                txtNumeroApartamento.setText(String.valueOf(consultaApartamento.getNumeroApartamento()));
+                txtBlocoApartamento.setText(consultaApartamento.getBlocoApartamento());
+                txtEstacionamento1.setText(consultaApartamento.getVagaApartamento_1());
+                txtEstacionamento2.setText(consultaApartamento.getVagaApartamento_2());
                 statusAlterarApartamento(true);
             }
         } else {
@@ -2330,16 +2367,17 @@ public class Principal extends javax.swing.JFrame {
         salvar = "Alterar";
         statusAlterarMorador(true);
         String cpf = txtCpfMorador.getText();
-        morador = dadosCondominio.consultaCpfMorador(cpf);
+        
 
         if (dadosCondominio.validaCpf(cpf).equals("Ok") || !txtCpfMorador.getText().isEmpty()) {
-            if (morador != null) {
-                getMorador(morador);
+            Morador consultaMorador = dadosCondominio.consultaCpfMorador(cpf);
+            if (consultaMorador != null) {
+                getMorador(consultaMorador);
                 statusAlterarMorador(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Morador não encontrado", "CPF não cadastrado",
                         JOptionPane.ERROR_MESSAGE);
-                statusConsultarMorador(true);
+                statusInicioMorador(true);
                 limparMorador();
             }
         } else {
@@ -2572,16 +2610,16 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnLocalizarPlacaVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalizarPlacaVeiculoActionPerformed
         String placa = txtPlacaVeiculo.getText();
-        veiculo = dadosCondominio.consultaPlacaVeiculo(placa);
+        Veiculo consultaVeiculo = dadosCondominio.consultaPlacaVeiculo(placa);
 
-        if (veiculo != null) {
-            morador = dadosCondominio.consultaCpfMorador(veiculo.getCpfMorador());
+        if (consultaVeiculo != null) {
+            morador = dadosCondominio.consultaCpfMorador(consultaVeiculo.getCpfMorador());
             apartamento = dadosCondominio.consultaCodigoApartamento(morador.getCodigoApartamento());
 
-            txtModeloVeiculo.setText(veiculo.getModelo());
-            txtCorVeiculo.setText(veiculo.getCor());
-            txtFabricanteVeiculo.setText(veiculo.getFabricante());
-            txtCpfMoradorVeiculo.setText(veiculo.getCpfMorador());
+            txtModeloVeiculo.setText(consultaVeiculo.getModelo());
+            txtCorVeiculo.setText(consultaVeiculo.getCor());
+            txtFabricanteVeiculo.setText(consultaVeiculo.getFabricante());
+            txtCpfMoradorVeiculo.setText(consultaVeiculo.getCpfMorador());
             txtNomeMoradorVeiculo.setText(morador.getNomeMorador());
             txtBlocoApartamentoVeiculo.setText(apartamento.getBlocoApartamento());
             txtNumeroApartamentoVeiculo.setText(apartamento.getNumeroApartamento());
@@ -2589,6 +2627,8 @@ public class Principal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Veículo não encontrado", "Placa do veículo não cadastrado",
                     JOptionPane.ERROR_MESSAGE);
+            limparVeiculo();
+            statusInicioVeiculo(true);
         }
     }//GEN-LAST:event_btnLocalizarPlacaVeiculoActionPerformed
 
@@ -2893,7 +2933,7 @@ public class Principal extends javax.swing.JFrame {
     private void setVeiculo() {
         Apartamento recebeApartamento = dadosCondominio.verificaExisteApartamento(txtBlocoApartamentoVeiculo.getText(), Integer.parseInt(txtNumeroApartamentoVeiculo.getText()));
         Morador recebeMorador = dadosCondominio.consultaCpfMorador(txtCpfMoradorVeiculo.getText());
-        veiculo.setPlaca(txtPlacaVeiculo.getText());
+        veiculo.setPlaca(txtPlacaVeiculo.getText().toUpperCase());
         veiculo.setModelo(txtModeloVeiculo.getText());
         veiculo.setFabricante(txtFabricanteVeiculo.getText());
         veiculo.setCor(txtCorVeiculo.getText());
@@ -2905,7 +2945,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void getVeiculo(Veiculo veiculo) {
-        txtPlacaVeiculo.setText(veiculo.getPlaca());
+        txtPlacaVeiculo.setText(veiculo.getPlaca().toUpperCase());
         txtModeloVeiculo.setText(veiculo.getModelo());
         txtFabricanteVeiculo.setText(veiculo.getFabricante());
         txtCorVeiculo.setText(veiculo.getCor());

@@ -119,22 +119,13 @@ public class Veiculo {
      
      public static String validaPlaca(String placa) {
          String msg;
-         placa = placa.replaceAll("[^a-zA-Z0-9]", "");
-         if(placa.length() == 7) {
+         //placa = placa.replaceAll("[^a-zA-Z0-9]", "");
+         if(placa.length() == 7 && placa.substring(0, 3).matches("[a-zA-Z]*") && 
+                placa.substring(3, 4).matches("[0-9]*") && placa.substring(5).matches("[0-9]*") ) {
              msg = "Ok";
+         } else {
+             msg = "Placa inválida, digite corretamente a placa!";
          }
-         
-         if(placa.substring(0, 3).matches("[A-Z]*")) {
-             msg = "Ok";
-         }
-         
-         if(placa.substring(3, 4).matches("[0-9]*")) {
-             msg = "Ok";
-         }
-         
-         if(placa.substring(4).matches("[0-9]*")) {
-             msg = "Ok";
-         }
-         return msg = "Placa inválida, digite corretamente a placa!";
+         return msg;
      }
 }
